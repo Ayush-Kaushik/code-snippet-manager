@@ -1,2 +1,2 @@
-# chattio
-A simple chat application created using GraphQL, React and Apollo client
+# Simple ToDo List
+Simple to-do list application built in React and Bootstrap
