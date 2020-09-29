@@ -9,9 +9,9 @@ import SignUpLayout from "./layout/SignUpLayout";
 function App() {
     return (
         <Router>
-            <Route path={ROUTES.SIGN_IN} component={SignInLayout}/>
-            <Route path={ROUTES.SIGN_UP} component={SignUpLayout}/>
-            <Route path={ROUTES.HOME} component={ToDoListLayout}/>
+            <Route exact path={ROUTES.SIGN_UP} component={SignUpLayout}/>
+            <Route exact path={ROUTES.SIGN_IN} component={SignInLayout}/>
+            <Route exact path={ROUTES.HOME} component={ToDoListLayout}/>
             <Route exact path={ROUTES.LANDING} component={ToDoListLayout}/>
         </Router>
     );

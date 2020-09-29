@@ -4,7 +4,6 @@ import {TextInputField, Button, Pane} from 'evergreen-ui';
 import * as ROUTES from "../constants/routes";
 import * as LABELS from "../constants/signuplabels";
 
-
 const SignInForm = () => {
 
     const history = useHistory();
@@ -15,7 +14,6 @@ const SignInForm = () => {
         e.preventDefault();
 
         try {
-
             history.push(ROUTES.HOME);
         } catch (error) {
             console.log(error);
@@ -50,14 +48,26 @@ const SignInForm = () => {
                     setPassword(e.target.value)
                 }}/>
 
-            <Button
-                appearance="primary"
-                intent="success"
-                onClick={e => {
-                    onSubmit(e)
-                }}>
-                {LABELS.SIGN_IN}
-            </Button>
+            <div style={{
+                display: "flex"
+            }}>
+                <Button
+                    appearance="primary"
+                    intent="success"
+                    margin={"2px"}
+                    onClick={e => {
+                        onSubmit(e)
+                    }}>
+                    {LABELS.SIGN_IN}
+                </Button>
+
+                <Button
+                    appearance="primary"
+                    margin={"2px"}
+                    onClick={ e => history.push(ROUTES.SIGN_UP)}>
+                    {LABELS.CREATE_ACCOUNT}
+                </Button>
+            </div>
         </Pane>
     )
 
