@@ -6,7 +6,6 @@ import * as ROUTES from "./constants/routes";
 import SignInLayout from "./layout/SignInLayout";
 import SignUpLayout from "./layout/SignUpLayout";
 
-
 function App() {
     return (
         <Router>
