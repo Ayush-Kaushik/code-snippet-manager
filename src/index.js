@@ -3,13 +3,17 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import {ToDoProvider} from "./context/ToDoContext";
+import {FirebaseProvider} from "./context/FirebaseContext";
 import * as serviceWorker from './serviceWorker';
+
 
 ReactDOM.render(
     <React.StrictMode>
-        <ToDoProvider>
-            <App/>
-        </ToDoProvider>
+        <FirebaseProvider>
+            <ToDoProvider>
+                <App/>
+            </ToDoProvider>
+        </FirebaseProvider>
     </React.StrictMode>,
     document.getElementById('root')
 );
