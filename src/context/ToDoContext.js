@@ -1,8 +1,10 @@
 import React, {createContext} from 'react';
+import {v4 as uuidV4} from 'uuid';
 
 export const ToDoContext = createContext();
-const addTask = () => {
-    console.log("Added new task");
+const addTask = (content) => {
+    const taskId = uuidV4();
+    console.log("Add this to list: " + content + " with task ID: " + taskId);
 }
 
 const removeTask = () => {
