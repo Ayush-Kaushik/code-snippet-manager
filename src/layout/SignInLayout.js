@@ -11,7 +11,7 @@ const SignInLayout = () => {
             alignItems: "center",
             justifyContent: "center"
         }}>
-            <img src={require('../assets/images/logo.png')} height={250} width={200} alt={LABELS.SIGN_IN}/>
+            <img src={require('../assets/images/logo_new.png')} height={250} width={250} alt={LABELS.SIGN_IN}/>
             <SignInForm/>
         </div>
     )
