@@ -1,43 +1,44 @@
 import React, {useState, useContext} from 'react';
-import {Form, Button} from "react-bootstrap";
-import {v4 as uuidv4} from 'uuid';
+import {TextInput, Button} from 'evergreen-ui';
 import {ToDoContext} from "../context/ToDoContext";
+import {FirebaseContext} from "../context/FirebaseContext";
 
-const ToDoForm = (props) => {
+const ToDoForm = () => {
     const todoContext = useContext(ToDoContext);
     const [content, setContent] = useState("");
+    const fireBaseContext = useContext(FirebaseContext);
 
     const confirmSubmission = (e) => {
         e.preventDefault();
 
         if (content.length !== 0) {
-            const taskId = uuidv4();
-            console.log("Add this to list: " + content + " with task ID: " + taskId);
-
-            todoContext.addTask();
+            todoContext.addTask(content);
         }
-
-
     }
 
     return (
-        <Form onSubmit={e => {
-            confirmSubmission(e)
-        }}>
-            <Form.Group controlId="todoForm">
-                <Form.Control type="name" value={content} onChange={e => {
-                    console.log(e.target.value);
-                    setContent(e.target.value)
-                }}/>
-                <Form.Text className="text-muted">
-                    We'll never share your email with anyone else.
-                </Form.Text>
-            </Form.Group>
+        <div>
+            <Button
+                intent={"error"}
+                onClick={() => {
+                    fireBaseContext.signOut();
+                }}>{"Signout"}</Button>
+            <form onSubmit={e => {
+                confirmSubmission(e)
+            }}>
+                <TextInput
+                    type="text"
+                    value={content}
+                    onChange={e => {
+                        console.log(e.target.value);
+                        setContent(e.target.value)
+                    }}/>
 
-            <Button variant="primary" type="submit">
-                Submit
-            </Button>
-        </Form>
+                <Button type="submit">
+                    Submit
+                </Button>
+            </form>
+        </div>
     )
 
 }
