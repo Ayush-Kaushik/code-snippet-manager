@@ -1,51 +1,55 @@
 import React, {createContext, useEffect, useState} from 'react';
 import {auth} from "../components/Firebase";
+import {Spinner, Pane} from "evergreen-ui";
 
 export const FirebaseContext = createContext(null);
 
 export const FirebaseProvider = (props) => {
-
-    const [initialUserState, setInitialUserState] = useState({
-        user: null
-    });
-
+    const [initialUser, setInitialUser] = useState(null);
+    const [pending, setPending] = useState(true);
     const [error, setError] = useState(null);
 
     const createUserWithEmailAndPassword = async (email, password) => {
         const authUser = await auth.createUserWithEmailAndPassword(email, password);
+        // setInitialUserState(authUser);
+    }
+
+    const signInWithEmailAndPassword = async (email, password) => {
+        const authUser = await auth.signInWithEmailAndPassword(email, password);
         console.log(authUser);
-        setInitialUserState(authUser);
-    }
-
-    const signInWithEmailAndPassword = (email, password) => {
-        auth.signInWithEmailAndPassword(email, password);
-    }
-
-    const passwordReset = email => auth.sendPasswordResetEmail(email);
-
-    const passwordUpdate = password => {
-        auth.currentUser.updatePassword(password)
+        setInitialUser(authUser);
     }
 
     const signOut = () => auth.signOut();
 
     useEffect(() => {
         auth.onAuthStateChanged((userAuth) => {
-            setInitialUserState({
-                user: userAuth
-            });
+            console.log(userAuth);
+            setInitialUser(userAuth);
+            setPending(false);
         });
-    }, [initialUserState]);
+    }, []);
+
+    if (pending) {
+        return (
+            <Pane style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "400"
+            }}>
+                <Spinner/>
+            </Pane>
+        )
+    }
 
     return (
         <FirebaseContext.Provider value={{
-            initialUserState: initialUserState,
+            initialUserState: initialUser,
             error: error,
             createUserWithEmailAndPassword: createUserWithEmailAndPassword,
             signInWithEmailAndPassword: signInWithEmailAndPassword,
-            signOut: signOut,
-            passwordReset: passwordReset,
-            passwordUpdate: passwordUpdate
+            signOut: signOut
         }}>
             {props.children}
         </FirebaseContext.Provider>

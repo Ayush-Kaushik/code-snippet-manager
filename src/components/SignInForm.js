@@ -1,11 +1,12 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {useHistory} from 'react-router-dom';
 import {TextInputField, Button, Pane} from 'evergreen-ui';
 import * as ROUTES from "../constants/routes";
 import * as LABELS from "../constants/signuplabels";
+import {FirebaseContext} from "../context/FirebaseContext";
 
 const SignInForm = () => {
-
+    const firebaseContext = useContext(FirebaseContext);
     const history = useHistory();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -14,6 +15,7 @@ const SignInForm = () => {
         e.preventDefault();
 
         try {
+            await firebaseContext.signInWithEmailAndPassword(username, password);
             history.push(ROUTES.HOME);
         } catch (error) {
             console.log(error);
@@ -64,13 +66,12 @@ const SignInForm = () => {
                 <Button
                     appearance="primary"
                     margin={"2px"}
-                    onClick={ e => history.push(ROUTES.SIGN_UP)}>
+                    onClick={() => history.push(ROUTES.SIGN_UP)}>
                     {LABELS.CREATE_ACCOUNT}
                 </Button>
             </div>
         </Pane>
     )
-
 }
 
 export default SignInForm;
