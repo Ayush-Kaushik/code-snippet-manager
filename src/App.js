@@ -21,11 +21,13 @@ function App() {
                     flexDirection: "row"
                 }}>
                     {(firebaseContext.initialUserState) ? <SideBar style={{
-                        flexGrow: "1"
+                        flexGrow: "2"
                     }}/> : <></>}
 
                     <div style={{
-                        flexGrow: "2"
+                        flexGrow: "2",
+                        display: "flex",
+                        justifyContent: "center"
                     }}>
                         <Route exact path={ROUTES.SIGN_UP} component={SignUpLayout}/>
                         <Route exact path={ROUTES.SIGN_IN} component={SignInLayout}/>

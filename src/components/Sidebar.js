@@ -1,16 +1,24 @@
 import React, {useState} from 'react';
-import {Pane, SidebarTab, Tablist} from "evergreen-ui";
+import {SidebarTab, Tablist, Pane} from "evergreen-ui";
 import * as ROUTES from "../constants/routes";
 import {Link} from "react-router-dom";
+import {LayersIcon, PersonIcon, PowerIcon} from "evergreen-ui";
 
 const sideBarContent = [
     {
         label: "Lists",
-        path: ROUTES.HOME
+        path: ROUTES.HOME,
+        icon: <LayersIcon/>
     },
     {
-        label: "profile",
-        path: ROUTES.PROFILE
+        label: "Profile",
+        path: ROUTES.PROFILE,
+        icon: <PersonIcon/>
+    },
+    {
+        label: "SignOut",
+        path: ROUTES.PROFILE,
+        icon: <PowerIcon/>
     }
 ];
 
@@ -18,30 +26,40 @@ const SideBar = () => {
     const [selectedIndex, setSelectedIndex] = useState("");
 
     return (
-        <Pane height={"100vh"}>
-            <Tablist marginBottom={16} flexBasis={240} marginRight={24}>
+        <Pane
+            elevation={2}>
+            <Tablist style={{
+                margin: "1rem",
+                height: "100vh",
+                backgroundColor: ""
+            }}>
                 {
                     sideBarContent.map((item, index) => {
                         return (
-                            <SidebarTab
-                                key={index}
-                                id={index}
-                                onSelect={() => setSelectedIndex({index})}
-                                isSelected={index === selectedIndex}
-                                aria-controls={`panel-${item.label}`}
-                            >
-                                <Link to={item.path}>
-                                    {item.label}
-                                </Link>
-                            </SidebarTab>
+
+                            <Link key={index} to={item.path} style={{
+                                textDecoration: "none"
+                            }}>
+                                <SidebarTab
+                                    key={index}
+                                    id={index}
+                                    onSelect={() => setSelectedIndex({index})}
+                                    isSelected={index === selectedIndex}
+                                    aria-controls={`panel-${item.label}`}
+                                    margin={"5px"}
+                                >
+                                    {item.icon}<span style={{
+                                    padding: "5px"
+                                }}/>{item.label}
+                                </SidebarTab>
+                            </Link>
+
                         )
                     })
                 }
             </Tablist>
         </Pane>
     );
-
-
 };
 
 
