@@ -13,22 +13,30 @@ import {FirebaseContext} from "./context/FirebaseContext";
 function App() {
     const firebaseContext = useContext(FirebaseContext);
 
-
     return (
         <div>
             <Router>
-                {
-                    firebaseContext.initialUserState ? <SideBar/> : <></>
-                }
+                <div style={{
+                    display: "flex",
+                    flexDirection: "row"
+                }}>
+                    {(firebaseContext.initialUserState) ? <SideBar style={{
+                        flexGrow: "1"
+                    }}/> : <></>}
 
-                <Route exact path={ROUTES.SIGN_UP} component={SignUpLayout}/>
-                <Route exact path={ROUTES.SIGN_IN} component={SignInLayout}/>
-                <PrivateRoute exact path={ROUTES.HOME} component={ToDoListLayout}/>
-                <PrivateRoute exact path={ROUTES.LANDING} component={ToDoListLayout}/>
-                <PrivateRoute exact path={ROUTES.PROFILE} component={ProfileLayout}/>
+                    <div style={{
+                        flexGrow: "2"
+                    }}>
+                        <Route exact path={ROUTES.SIGN_UP} component={SignUpLayout}/>
+                        <Route exact path={ROUTES.SIGN_IN} component={SignInLayout}/>
+                        <PrivateRoute exact path={ROUTES.HOME} component={ToDoListLayout}/>
+                        <PrivateRoute exact path={ROUTES.LANDING} component={ToDoListLayout}/>
+                        <PrivateRoute exact path={ROUTES.PROFILE} component={ProfileLayout}/>
+                    </div>
+                </div>
             </Router>
         </div>
-    );
+    )
 }
 
 export default App;

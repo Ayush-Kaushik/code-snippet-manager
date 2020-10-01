@@ -18,7 +18,7 @@ const SideBar = () => {
     const [selectedIndex, setSelectedIndex] = useState("");
 
     return (
-        <Pane display="flex" height={"100vh"}>
+        <Pane height={"100vh"}>
             <Tablist marginBottom={16} flexBasis={240} marginRight={24}>
                 {
                     sideBarContent.map((item, index) => {
