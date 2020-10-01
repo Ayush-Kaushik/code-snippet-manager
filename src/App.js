@@ -10,16 +10,21 @@ import SideBar from "./components/Sidebar";
 import ProfileLayout from "./layout/ProfileLayout";
 import {FirebaseContext} from "./context/FirebaseContext";
 
+const backgroundStyle = {
+    display: "flex",
+    flexDirection: "row",
+    height: "100vh"
+}
+
 function App() {
     const firebaseContext = useContext(FirebaseContext);
 
     return (
         <div>
             <Router>
-                <div style={{
-                    display: "flex",
-                    flexDirection: "row"
-                }}>
+                <div style={
+                    backgroundStyle
+                }>
                     {(firebaseContext.initialUserState) ? <SideBar style={{
                         flexGrow: "2"
                     }}/> : <></>}
@@ -27,7 +32,8 @@ function App() {
                     <div style={{
                         flexGrow: "2",
                         display: "flex",
-                        justifyContent: "center"
+                        justifyContent: "center",
+
                     }}>
                         <Route exact path={ROUTES.SIGN_UP} component={SignUpLayout}/>
                         <Route exact path={ROUTES.SIGN_IN} component={SignInLayout}/>

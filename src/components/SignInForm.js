@@ -31,7 +31,12 @@ const SignInForm = () => {
             flexDirection="column"
             flexWrap={"wrap"}
             padding={"1.5vw"}
+            style={{
+                backgroundColor: "#EDF0F2",
+                borderRadius: "5px"
+            }}
         >
+            <img src={require('../assets/images/logo_new.png')} height={250} width={250} alt={LABELS.SIGN_IN}/>
             <TextInputField
                 type="text"
                 name={"username"}
@@ -50,13 +55,19 @@ const SignInForm = () => {
                     setPassword(e.target.value)
                 }}/>
 
-            <div style={{
-                display: "flex"
-            }}>
+            {/*<div style={{*/}
+            {/*    display: "flex"*/}
+            {/*}}>*/}
                 <Button
                     appearance="primary"
                     intent="success"
                     margin={"2px"}
+
+                    width={"150px"}
+                    style={{
+                        display: "inline-block",
+                        verticalAlign: "top"
+                    }}
                     onClick={e => {
                         onSubmit(e)
                     }}>
@@ -65,11 +76,16 @@ const SignInForm = () => {
 
                 <Button
                     appearance="primary"
-                    margin={"2px"}
+                    margin={"5px"}
+                    width={"150px"}
+                    style={{
+                        display: "inline-block",
+                        verticalAlign: "top"
+                    }}
                     onClick={() => history.push(ROUTES.SIGN_UP)}>
                     {LABELS.CREATE_ACCOUNT}
                 </Button>
-            </div>
+            {/*</div>*/}
         </Pane>
     )
 }
