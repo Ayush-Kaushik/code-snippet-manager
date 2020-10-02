@@ -1,8 +1,9 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {SidebarTab, Tablist, Pane} from "evergreen-ui";
 import * as ROUTES from "../constants/routes";
 import {Link} from "react-router-dom";
 import {LayersIcon, PersonIcon, PowerIcon} from "evergreen-ui";
+import {FirebaseContext} from "../context/FirebaseContext";
 
 const sideBarContent = [
     {
@@ -24,6 +25,7 @@ const sideBarContent = [
 
 const SideBar = () => {
     const [selectedIndex, setSelectedIndex] = useState("");
+    const firebaseContext = useContext(FirebaseContext);
 
     return (
         <Pane
@@ -35,9 +37,28 @@ const SideBar = () => {
             }}>
                 {
                     sideBarContent.map((item, index) => {
-                        return (
 
-                            <Link key={index} to={item.path} style={{
+                        if (item.label === "SignOut") {
+                            return (
+                                <SidebarTab
+                                    key={index}
+                                    id={index}
+                                    onSelect={() => {
+                                        firebaseContext.signOut();
+                                    }}
+                                    isSelected={index === selectedIndex}
+                                    aria-controls={`panel-${item.label}`}
+                                    style={{
+                                        padding: "5px",
+                                        margin: "5px"
+                                    }}
+                                >
+                                    {item.icon}<span style={{
+                                    padding: "5px"
+                                }}/>{item.label}
+                                </SidebarTab>)
+                        } else {
+                            return (<Link key={index} to={item.path} style={{
                                 textDecoration: "none"
                             }}>
                                 <SidebarTab
@@ -46,17 +67,21 @@ const SideBar = () => {
                                     onSelect={() => setSelectedIndex({index})}
                                     isSelected={index === selectedIndex}
                                     aria-controls={`panel-${item.label}`}
-                                    margin={"5px"}
+                                    style={{
+                                        padding: "5px",
+                                        margin: "5px"
+                                    }}
                                 >
                                     {item.icon}<span style={{
                                     padding: "5px"
                                 }}/>{item.label}
                                 </SidebarTab>
-                            </Link>
-
-                        )
+                            </Link>)
+                        }
                     })
                 }
+
+
             </Tablist>
         </Pane>
     );

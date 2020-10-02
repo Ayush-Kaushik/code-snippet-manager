@@ -27,10 +27,11 @@ const list = [
 ]
 
 
-
 const ToDoListLayout = () => {
     return (
-        <div>
+        <div style={{
+            width: "100%"
+        }}>
             <ToDoForm/>
             <div>{
                 list.map((item) => {
