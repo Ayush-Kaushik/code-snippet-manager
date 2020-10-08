@@ -59,7 +59,7 @@ const SignUpForm = () => {
             });
         }
 
-        if(newPassword !== confirmPassword) {
+        if (newPassword !== confirmPassword) {
             formHasError = true;
             setErrors(prevState => {
                 return {
@@ -125,6 +125,7 @@ const SignUpForm = () => {
                 name={"username"}
                 value={username}
                 label={LABELS.USERNAME}
+                validationMessage={(errors.username > 0) ? errors.username : false}
                 onChange={e => {
                     setErrors(prevState => ({
                         ...prevState,
@@ -133,14 +134,12 @@ const SignUpForm = () => {
                     setUsername(e.target.value)
                 }}/>
 
-            {(errors.username.length > 0) ?
-                <InlineAlert intent={"danger"}>{errors.username}</InlineAlert> : <></>}
-
             <TextInputField
                 type="password"
                 name={"password"}
                 label={LABELS.NEW_PASSWORD}
                 value={newPassword}
+                validationMessage={(errors.newPassword > 0) ? errors.newPassword : false}
                 onChange={e => {
                     setErrors(prevState => ({
                         ...prevState,
@@ -149,16 +148,12 @@ const SignUpForm = () => {
                     setNewPassword(e.target.value)
                 }}/>
 
-            {(errors.newPassword.length > 0) ?
-                <InlineAlert style={{
-                    fontSize: "5px"
-                }} intent={"danger"}>{errors.newPassword}</InlineAlert> : <></>}
-
             <TextInputField
                 type="password"
                 name={"password"}
                 label={LABELS.CONFIRM_NEW_PASSWORD}
                 value={confirmPassword}
+                validationMessage={(errors.confirmPassword > 0) ? errors.confirmPassword : false}
                 onChange={e => {
                     setErrors(prevState => ({
                         ...prevState,
@@ -166,11 +161,6 @@ const SignUpForm = () => {
                     }))
                     setConfirmPassword(e.target.value)
                 }}/>
-
-            {(errors.confirmPassword.length > 0) ?
-                <InlineAlert style={{
-                    fontSize: "5px"
-                }} intent={"danger"}>{errors.confirmPassword}</InlineAlert> : <></>}
 
             <Button
                 appearance="primary"

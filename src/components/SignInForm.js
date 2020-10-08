@@ -119,6 +119,7 @@ const SignInForm = () => {
                 value={username}
                 label={LABELS.USERNAME}
                 isInvalid={(errors.username.length > 0)}
+                validationMessage={(errors.username.length > 0) ? errors.username : false}
                 onChange={e => {
                     setErrors(prevState => ({
                         ...prevState,
@@ -126,14 +127,13 @@ const SignInForm = () => {
                     }))
                     setUsername(e.target.value)
                 }}/>
-            {(errors.username.length > 0) ?
-                <InlineAlert intent={"danger"}>{errors.username}</InlineAlert> : <></>}
 
             <TextInputField
                 type="password"
                 name={"password"}
                 label={LABELS.PASSWORD}
                 isInvalid={(errors.password.length > 0)}
+                validationMessage={(errors.password.length > 0) ? errors.password : false}
                 value={password}
                 onChange={e => {
                     setErrors(prevState => ({
@@ -142,10 +142,6 @@ const SignInForm = () => {
                     }))
                     setPassword(e.target.value)
                 }}/>
-            {(errors.password.length > 0) ?
-                <InlineAlert style={{
-                    fontSize: "5px"
-                }} intent={"danger"}>{errors.password}</InlineAlert> : <></>}
 
             <Button
                 appearance="primary"
