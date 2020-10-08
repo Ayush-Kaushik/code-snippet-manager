@@ -1,6 +1,7 @@
 import React from 'react';
 import ToDoItem from "../components/ToDoItem";
 import ToDoForm from "../components/ToDoForm";
+import NewList from "../components/NewList";
 
 const list = [
     {
@@ -32,6 +33,7 @@ const ToDoListLayout = () => {
         <div style={{
             width: "100%"
         }}>
+            <NewList/>
             <ToDoForm/>
             <div>{
                 list.map((item) => {
