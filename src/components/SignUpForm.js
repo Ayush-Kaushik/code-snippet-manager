@@ -35,7 +35,12 @@ const SignUpForm = () => {
             flexDirection="column"
             flexWrap={"wrap"}
             padding={"1.5vw"}
+            style={{
+                backgroundColor: "#EDF0F2",
+                borderRadius: "5px"
+            }}
         >
+            <img src={require('../assets/images/logo_new.png')} height={250} width={200} alt={LABELS.SIGN_UP}/>
             <TextInputField
                 type="text"
                 name={"username"}
