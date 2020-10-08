@@ -1,11 +1,10 @@
-import React, {useState, useContext, useEffect} from 'react';
+import React, {useState, useContext} from 'react';
 import {TextInput, Button} from 'evergreen-ui';
 import {ToDoContext} from "../context/ToDoContext";
-import {FireStoreContext} from "../context/FireStoreContext";
 
 const ToDoForm = () => {
     const todoContext = useContext(ToDoContext);
-    const fireStoreContext = useContext(FireStoreContext)
+
     const [content, setContent] = useState("");
 
     const confirmSubmission = (e) => {
@@ -16,9 +15,7 @@ const ToDoForm = () => {
         }
     }
 
-    useEffect(() => {
-        fireStoreContext.getListTasks();
-    }, []);
+
 
     return (
         <div>
