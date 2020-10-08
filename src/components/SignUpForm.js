@@ -3,7 +3,7 @@ import {useHistory} from 'react-router-dom';
 import {TextInputField, Button, Pane, InlineAlert} from 'evergreen-ui';
 import {FirebaseContext} from "../context/FirebaseContext";
 import * as ROUTES from "../constants/routes";
-import * as LABELS from "../constants/signuplabels";
+import * as LABELS from "../constants/labels";
 import * as EmailValidator from "email-validator";
 
 
