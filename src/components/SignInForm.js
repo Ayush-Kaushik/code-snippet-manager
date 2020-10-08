@@ -151,7 +151,6 @@ const SignInForm = () => {
                 appearance="primary"
                 intent="success"
                 margin={"2px"}
-
                 width={"150px"}
                 style={{
                     display: "inline-block",
