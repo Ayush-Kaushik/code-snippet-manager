@@ -1,8 +1,9 @@
 import React from 'react';
+import Profile from "../components/Profile";
 
 const ProfileLayout = () => {
     return (
-        <div>User Profile</div>
+        <Profile />
     )
 };
 
