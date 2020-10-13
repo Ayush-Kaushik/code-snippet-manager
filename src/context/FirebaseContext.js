@@ -7,27 +7,33 @@ export const FirebaseContext = createContext(null);
 export const FirebaseProvider = (props) => {
     const [initialUser, setInitialUser] = useState(null);
     const [pending, setPending] = useState(true);
-    const [error, setError] = useState(null);
 
-    const createUserWithEmailAndPassword = async (email, password) => {
-        const authUser = await auth.createUserWithEmailAndPassword(email, password);
-        // setInitialUserState(authUser);
+    const createUserWithEmailAndPassword = (email, password) => {
+        return auth.createUserWithEmailAndPassword(email, password);
     }
 
-    const signInWithEmailAndPassword = async (email, password) => {
-        const authUser = await auth.signInWithEmailAndPassword(email, password);
-        console.log(authUser);
-        setInitialUser(authUser);
+    const signInWithEmailAndPassword = (email, password) => {
+        return auth.signInWithEmailAndPassword(email, password);
     }
+
+    const updatePassword = (password) => {
+       return auth.currentUser.updatePassword(password);
+    }
+
+    const updateEmail = (email) => {
+        return auth.currentUser.updateEmail(email);
+    }
+
 
     const signOut = () => auth.signOut();
 
     useEffect(() => {
-        auth.onAuthStateChanged((userAuth) => {
+        return auth.onAuthStateChanged((userAuth) => {
             console.log(userAuth);
             setInitialUser(userAuth);
             setPending(false);
         });
+
     }, []);
 
     if (pending) {
@@ -36,9 +42,9 @@ export const FirebaseProvider = (props) => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                height: "400"
+                height: "100vh"
             }}>
-                <Spinner/>
+                <Spinner size={40}/>
             </Pane>
         )
     }
@@ -46,10 +52,11 @@ export const FirebaseProvider = (props) => {
     return (
         <FirebaseContext.Provider value={{
             initialUserState: initialUser,
-            error: error,
             createUserWithEmailAndPassword: createUserWithEmailAndPassword,
             signInWithEmailAndPassword: signInWithEmailAndPassword,
-            signOut: signOut
+            signOut: signOut,
+            updateEmail: updateEmail,
+            updatePassword: updatePassword
         }}>
             {props.children}
         </FirebaseContext.Provider>
