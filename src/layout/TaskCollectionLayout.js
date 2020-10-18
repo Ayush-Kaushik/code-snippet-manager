@@ -1,8 +1,8 @@
 import React, {useContext, useEffect} from 'react';
 import {FireStoreContext} from "../context/FireStoreContext";
-import {TrashIcon, Paragraph, Button} from "evergreen-ui";
+import { TrashIcon, Paragraph, Button} from "evergreen-ui";
 
-const ListCollectionLayout = () => {
+const TaskCollectionLayout = () => {
     const fireStoreContext = useContext(FireStoreContext);
 
     useEffect(() => {
@@ -53,4 +53,4 @@ const ListCollectionLayout = () => {
     )
 };
 
-export default ListCollectionLayout;
+export default TaskCollectionLayout;

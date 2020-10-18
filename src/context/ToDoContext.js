@@ -12,7 +12,10 @@ const removeTask = () => {
 }
 
 export const ToDoProvider = (props) => {
-    const initialState = {};
+    const initialState = {
+        currentListId: null,
+        currentTaskId: null
+    };
     return (
         <ToDoContext.Provider
             value={{

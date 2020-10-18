@@ -3,7 +3,7 @@ import {Button, TextInput, AddIcon} from "evergreen-ui";
 import {FireStoreContext} from "../context/FireStoreContext";
 import {FirebaseContext} from "../context/FirebaseContext";
 
-const NewList = () => {
+const NewTask = () => {
     const [title, setTitle] = useState("");
     const fireStoreContext = useContext(FireStoreContext);
     const fireBaseContext = useContext(FirebaseContext);
@@ -56,4 +56,4 @@ const NewList = () => {
     )
 };
 
-export default NewList;
+export default NewTask;

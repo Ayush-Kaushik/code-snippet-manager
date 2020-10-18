@@ -7,12 +7,11 @@ import PrivateRoute from "./components/PrivateRoute";
 import SideBar from "./components/Sidebar";
 import ProfileLayout from "./layout/ProfileLayout";
 import {FirebaseContext} from "./context/FirebaseContext";
-import ListCollectionLayout from "./layout/ListCollectionLayout";
+import ToDoListLayout from "./layout/ToDoListLayout";
 
 const backgroundStyle = {
     display: "flex",
-    flexDirection: "row",
-    height: "100vh"
+    flexDirection: "row"
 }
 
 function App() {
@@ -24,20 +23,17 @@ function App() {
                 <div style={
                     backgroundStyle
                 }>
-                    {(firebaseContext.initialUserState) ? <SideBar style={{
-                        flexGrow: "2"
-                    }}/> : <></>}
+                    {(firebaseContext.initialUserState) ? <SideBar/> : <></>}
 
                     <div style={{
-                        flexGrow: "2",
                         display: "flex",
                         justifyContent: "center",
-
+                        width: "100%"
                     }}>
                         <Route exact path={ROUTES.SIGN_UP} component={SignUpLayout}/>
                         <Route exact path={ROUTES.SIGN_IN} component={SignInLayout}/>
-                        <PrivateRoute exact path={ROUTES.HOME} component={ListCollectionLayout}/>
-                        <PrivateRoute exact path={ROUTES.LANDING} component={ListCollectionLayout}/>
+                        <PrivateRoute exact path={ROUTES.HOME} component={ToDoListLayout}/>
+                        <PrivateRoute exact path={ROUTES.LANDING} component={ToDoListLayout}/>
                         <PrivateRoute exact path={ROUTES.PROFILE} component={ProfileLayout}/>
                     </div>
                 </div>

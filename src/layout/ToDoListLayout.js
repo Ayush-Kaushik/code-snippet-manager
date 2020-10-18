@@ -1,8 +1,4 @@
 import React from 'react';
-import ToDoItem from "../components/ToDoItem";
-import ToDoForm from "../components/ToDoForm";
-import NewList from "../components/NewList";
-
 const list = [
     {
         "createdBy": "Ayush",
@@ -30,18 +26,8 @@ const list = [
 
 const ToDoListLayout = () => {
     return (
-        <div style={{
-            width: "100%"
-        }}>
-            <NewList/>
-            <ToDoForm/>
-            <div>{
-                list.map((item) => {
-                    return (
-                        <ToDoItem key={item.id} information={item}/>
-                    )
-                })
-            }</div>
+        <div >
+            {JSON.stringify(list)}
         </div>
     )
 };
