@@ -7,7 +7,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import SideBar from "./components/Sidebar";
 import ProfileLayout from "./layout/ProfileLayout";
 import {FirebaseContext} from "./context/FirebaseContext";
-import ToDoListLayout from "./layout/ToDoListLayout";
+import TaskCollectionLayout from "./layout/TaskCollectionLayout";
 
 const backgroundStyle = {
     display: "flex",
@@ -32,8 +32,8 @@ function App() {
                     }}>
                         <Route exact path={ROUTES.SIGN_UP} component={SignUpLayout}/>
                         <Route exact path={ROUTES.SIGN_IN} component={SignInLayout}/>
-                        <PrivateRoute exact path={ROUTES.HOME} component={ToDoListLayout}/>
-                        <PrivateRoute exact path={ROUTES.LANDING} component={ToDoListLayout}/>
+                        <PrivateRoute exact path={ROUTES.HOME} component={TaskCollectionLayout}/>
+                        <PrivateRoute exact path={ROUTES.LANDING} component={TaskCollectionLayout}/>
                         <PrivateRoute exact path={ROUTES.PROFILE} component={ProfileLayout}/>
                     </div>
                 </div>

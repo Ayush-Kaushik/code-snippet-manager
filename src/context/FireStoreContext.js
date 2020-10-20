@@ -10,7 +10,9 @@ export const FireStoreProvider = (props) => {
     const fireBaseContext = useContext(FirebaseContext);
     const [initialStore, setInitialStore] = useState({
         list: [],
-        tasks: []
+        tasks: [],
+        selectedListId: null,
+        selectedTaskId: null
     });
 
     /**
@@ -20,8 +22,10 @@ export const FireStoreProvider = (props) => {
         fireStore.collection(COLLECTION.LISTS)
             .where("createdBy", "==", fireBaseContext.initialUserState.email)
             .get().then(snapshot => {
+
+            console.log("This is called");
+
             const firestoreList = snapshot.docs.map((item) => {
-                console.log({...item.data(), id: item.id});
                 return {...item.data(), id: item.id}
             });
 
@@ -77,14 +81,22 @@ export const FireStoreProvider = (props) => {
         });
     }
 
-    const streamListTasks = () => {
+    const streamListTasks = (listId) => {
+        setInitialStore(prevStore => {
+            return {
+                ...prevStore,
+                selectedListId: listId
+            }
+        });
 
-        fireStore.collection(COLLECTION.LISTS).orderBy('createdDateTime').then(querySnapshot => {
+        fireStore.collection(`${COLLECTION.LISTS}/${listId}${COLLECTION.TASKS}`).get().then(querySnapshot => {
             const data = querySnapshot.docs.map(doc => ({...doc.data(), id: doc.id}))
             setInitialStore(prevStore => {
+                console.log(data);
+
                 return {
                     ...prevStore,
-                    list: data
+                    tasks: data
                 }
             })
         }).catch(error => {
@@ -95,9 +107,9 @@ export const FireStoreProvider = (props) => {
     return (
         <FireStoreContext.Provider value={{
             initialStore: initialStore,
+            streamList: streamList,
             streamListTasks: streamListTasks,
-            createNewList: createNewList,
-            streamList: streamList
+            createNewList: createNewList
         }}>
             {props.children}
         </FireStoreContext.Provider>

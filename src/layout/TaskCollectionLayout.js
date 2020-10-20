@@ -1,19 +1,21 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext} from 'react';
 import {FireStoreContext} from "../context/FireStoreContext";
-import { TrashIcon, Paragraph, Button} from "evergreen-ui";
+import {Checkbox} from "evergreen-ui";
+import NewTask from "../components/NewTask";
 
 const TaskCollectionLayout = () => {
     const fireStoreContext = useContext(FireStoreContext);
 
-    useEffect(() => {
-        fireStoreContext.streamList()
-    }, []);
-
     return (
-        <div>
+        <div style={{
+            marginLeft: "20%",
+            width: "80%",
+            marginRight: "20%",
+            marginTop: "10%"
+        }}>
             <div>
                 {
-                    fireStoreContext.initialStore.list.map((item) => {
+                    fireStoreContext.initialStore.tasks.map((item) => {
                         console.log(item);
 
                         return (
@@ -22,33 +24,20 @@ const TaskCollectionLayout = () => {
                                 style={{
                                     display: "flex",
                                     padding: "15px",
-                                    marginRight: "5px",
-                                    alignItems: "center"
+                                    marginRight: "5px"
                                 }}
                             >
-                                <Paragraph
-                                    size={300}
-                                    style={{
-                                        overflowX: "hidden",
-                                        textOverflow: "ellipsis",
-                                        width: "70%"
-                                    }}
-                                >{item.title}</Paragraph>
-
-                                <Button color={"danger"}
-                                        appearance="minimal"
-                                        intent="danger"
-                                        margin={"5px"}
-                                        height={20}
-                                        onClick={() => {
-                                        }}>
-                                    <TrashIcon/>
-                                </Button>
+                                <Checkbox
+                                    label={item.title}
+                                    checked={false}
+                                    onChange={e => {console.log(e.target.value)}}
+                                />
                             </div>
                         )
                     })
                 }
             </div>
+            <NewTask/>
         </div>
     )
 };

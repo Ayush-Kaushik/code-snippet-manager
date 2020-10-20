@@ -37,7 +37,9 @@ const NewList = () => {
                 label={""}
                 placeholder={"Add list"}
                 style={{
-                    width: "60%"
+                    width: "60%",
+                    marginRight: "2px"
+
                 }}
                 height={32}
                 onChange={e => {

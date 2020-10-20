@@ -1,12 +1,20 @@
 import React, {useContext, useEffect} from 'react';
 import {FireStoreContext} from "../context/FireStoreContext";
 import {TrashIcon, Paragraph, Button} from "evergreen-ui";
+import * as ROUTES from "../constants/routes";
+import {useHistory} from "react-router-dom";
+import {FirebaseContext} from "../context/FirebaseContext";
 
 const ListCollectionLayout = () => {
     const fireStoreContext = useContext(FireStoreContext);
+    const fireBaseContext = useContext(FirebaseContext);
+    const history = useHistory();
 
     useEffect(() => {
-        fireStoreContext.streamList()
+        if(fireBaseContext.initialUserState) {
+            console.log("This is called");
+            fireStoreContext.streamList();
+        }
     }, []);
 
     return (
@@ -14,8 +22,6 @@ const ListCollectionLayout = () => {
             <div>
                 {
                     fireStoreContext.initialStore.list.map((item) => {
-                        console.log(item);
-
                         return (
                             <div
                                 key={item.id}
@@ -24,6 +30,12 @@ const ListCollectionLayout = () => {
                                     padding: "15px",
                                     marginRight: "5px",
                                     alignItems: "center"
+                                }}
+
+                                onClick={() => {
+                                    console.log(`This div is clicked: ${item.id}`)
+                                    fireStoreContext.streamListTasks(item.id)
+                                    history.push(ROUTES.HOME);
                                 }}
                             >
                                 <Paragraph
@@ -41,6 +53,7 @@ const ListCollectionLayout = () => {
                                         margin={"5px"}
                                         height={20}
                                         onClick={() => {
+
                                         }}>
                                     <TrashIcon/>
                                 </Button>
