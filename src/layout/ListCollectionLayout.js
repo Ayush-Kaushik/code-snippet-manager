@@ -1,61 +1,63 @@
 import React, {useContext, useEffect} from 'react';
 import {FireStoreContext} from "../context/FireStoreContext";
-import {Pane, Heading, Button} from "evergreen-ui";
-import NewList from "../components/NewList";
-import * as LABELS from "../constants/labels";
+import {TrashIcon, Paragraph, Button} from "evergreen-ui";
+import * as ROUTES from "../constants/routes";
+import {useHistory} from "react-router-dom";
+import {FirebaseContext} from "../context/FirebaseContext";
 
 const ListCollectionLayout = () => {
     const fireStoreContext = useContext(FireStoreContext);
+    const fireBaseContext = useContext(FirebaseContext);
+    const history = useHistory();
 
     useEffect(() => {
-        fireStoreContext.getListTasks();
-        console.log(fireStoreContext.initialStore.list);
-
+        if(fireBaseContext.initialUserState) {
+            console.log("This is called");
+            fireStoreContext.streamList();
+        }
     }, []);
 
     return (
-        <div style={{
-            width: "100%"
-        }}>
-            <NewList/>
+        <div>
             <div>
                 {
                     fireStoreContext.initialStore.list.map((item) => {
-                        console.log(item);
-
                         return (
-                            <Pane
-                                elevation={2}
-                                display={"flex"}
-                                flexDirection={"row"}
-                                margin={"1.5vw"}
-                                padding={"1.5vw"}
+                            <div
                                 key={item.id}
+                                style={{
+                                    display: "flex",
+                                    padding: "15px",
+                                    marginRight: "5px",
+                                    alignItems: "center"
+                                }}
+
+                                onClick={() => {
+                                    console.log(`This div is clicked: ${item.id}`)
+                                    fireStoreContext.streamListTasks(item.id)
+                                    history.push(ROUTES.HOME);
+                                }}
                             >
-                                <Heading
-                                    flexGrow={1}
-                                    is={"h4"}
-                                >{item.title}</Heading>
-                                <div flexGrow={2}>
-                                    <Button
-                                        appearance="primary"
-                                        margin={"5px"}
-                                        onClick={() => {
+                                <Paragraph
+                                    size={300}
+                                    style={{
+                                        overflowX: "hidden",
+                                        textOverflow: "ellipsis",
+                                        width: "70%"
+                                    }}
+                                >{item.title}</Paragraph>
 
-                                        }}>
-                                        {LABELS.LIST_VIEW_TASKS}
-                                    </Button>
-
-                                    <Button
-                                        appearance="primary"
+                                <Button color={"danger"}
+                                        appearance="minimal"
                                         intent="danger"
                                         margin={"5px"}
+                                        height={20}
                                         onClick={() => {
+
                                         }}>
-                                        {LABELS.LIST_VIEW_DELETE}
-                                    </Button>
-                                </div>
-                            </Pane>
+                                    <TrashIcon/>
+                                </Button>
+                            </div>
                         )
                     })
                 }

@@ -1,60 +1,112 @@
 import React, {useContext, useState} from 'react';
-import * as LABELS from "../constants/labels";
-import {Button, Pane, TextInputField} from "evergreen-ui";
+import {Button, TextInput, AddIcon, FlagIcon, CrossIcon, SelectMenu, Tooltip, TimeIcon} from "evergreen-ui";
 import {FireStoreContext} from "../context/FireStoreContext";
 import {FirebaseContext} from "../context/FirebaseContext";
+import * as LABELS from "../constants/labels";
 
 const NewTask = () => {
     const [title, setTitle] = useState("");
+    const [notes, setNotes] = useState("");
+    const [priority, setPriority] = useState(null);
     const fireStoreContext = useContext(FireStoreContext);
     const fireBaseContext = useContext(FirebaseContext);
 
-    const onSubmit = async (e) => {
+    const onSubmit = (e) => {
         e.preventDefault();
 
-        await fireStoreContext.createNewList({
+        fireStoreContext.createNewTask({
+            listId: fireBaseContext.initialUserState.selectedListId,
             title: title,
-            createdBy: fireBaseContext.initialUserState.email,
+            notes: notes,
             createDateTime: new Date().getSeconds()
         });
+
+        fireStoreContext.streamList();
+        setTitle("");
     }
 
     return (
-        <Pane
-            elevation={3}
-            display={"flex"}
-            flexDirection="column"
-            flexWrap={"wrap"}
-            padding={"1.5vw"}
+        <div
             style={{
-                backgroundColor: "#EDF0F2",
-                borderRadius: "5px"
+                display: "flex",
+                flexDirection: "column"
             }}
         >
-            <TextInputField
-                type="text"
-                name={"title"}
-                value={title}
-                label={LABELS.TASK_TITLE}
-                onChange={e => {
-                    setTitle(e.target.value)
-                }}/>
+            <div style={{
+                display: "flex",
+                justifyContent: "flex-start",
+                marginBottom: "5px"
+            }}>
+                <TextInput
+                    style={{
+                        marginRight: "2px"
+                    }}
+                    type="text"
+                    name={"title"}
+                    value={title}
+                    height={32}
+                    label={"Title"}
+                    placeholder={"eg. Finish CI/CD pipeline"}
+                    onChange={e => {
+                        setTitle(e.target.value)
+                    }}/>
 
-            <Button
-                appearance="primary"
-                intent="success"
-                margin={"2px"}
-                width={"150px"}
-                style={{
-                    display: "inline-block",
-                    verticalAlign: "top"
-                }}
-                onClick={e => {
-                    onSubmit(e)
+                <div style={{
+                    marginRight: "2px"
                 }}>
-                {LABELS.CREATE_TASK}
-            </Button>
-        </Pane>
+                    <Tooltip content={"Priority"}>
+                        <SelectMenu
+                            height={100}
+                            width={180}
+                            hasTitle={false}
+                            hasFilter={false}
+                            selected={priority}
+                            options={LABELS.PRIORITY}
+                            onSelect={e => setPriority(e.target.value)}
+                        >
+                            <Button>
+                                <FlagIcon/>
+                            </Button>
+                        </SelectMenu>
+                    </Tooltip>
+                </div>
+                <Button
+                >
+                    <TimeIcon/>
+                </Button>
+            </div>
+
+            <div style={{
+                display: "flex",
+                justifyContent: "flex-start"
+            }}>
+                <Button
+                    style={{
+                        marginRight: "2px"
+                    }}
+                    appearance="primary"
+                    iconBefore={AddIcon}
+                    intent="success"
+                    onClick={e => {
+                        onSubmit(e)
+                    }}>
+                    {"Add Task"}
+                </Button>
+                <Button
+                    style={{
+                        marginRight: "2px"
+                    }}
+                    appearance="primary"
+                    iconBefore={CrossIcon}
+                    intent={"danger"}
+                    onSubmit={e => {
+                        console.log("scratch that bro");
+                    }}>
+                    {"Cancel"}
+                </Button>
+
+            </div>
+        </div>
     )
 };
 

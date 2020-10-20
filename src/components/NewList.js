@@ -1,6 +1,5 @@
 import React, {useContext, useState} from 'react';
-import * as LABELS from "../constants/labels";
-import {Button, Pane, TextInputField} from "evergreen-ui";
+import {Button, TextInput, AddIcon} from "evergreen-ui";
 import {FireStoreContext} from "../context/FireStoreContext";
 import {FirebaseContext} from "../context/FirebaseContext";
 
@@ -9,52 +8,53 @@ const NewList = () => {
     const fireStoreContext = useContext(FireStoreContext);
     const fireBaseContext = useContext(FirebaseContext);
 
-    const onSubmit = async (e) => {
+    const onSubmit = (e) => {
         e.preventDefault();
 
-        await fireStoreContext.createNewList({
+        fireStoreContext.createNewList({
             title: title,
             createdBy: fireBaseContext.initialUserState.email,
-            createDateTime: new Date().getSeconds()
+            createDateTime: new Date().getSeconds(),
+            taskCount: 0
         });
+
+        fireStoreContext.streamList();
+        setTitle("");
     }
 
     return (
-        <Pane
-            elevation={3}
-            display={"flex"}
-            flexDirection="column"
-            flexWrap={"wrap"}
-            padding={"1.5vw"}
+        <div
             style={{
-                backgroundColor: "#EDF0F2",
-                borderRadius: "5px"
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
             }}
         >
-            <TextInputField
+            <TextInput
                 type="text"
                 name={"title"}
                 value={title}
-                label={LABELS.LIST_TITLE}
+                label={""}
+                placeholder={"Add list"}
+                style={{
+                    width: "60%",
+                    marginRight: "2px"
+
+                }}
+                height={32}
                 onChange={e => {
                     setTitle(e.target.value)
                 }}/>
-
             <Button
                 appearance="primary"
                 intent="success"
-                margin={"2px"}
-                width={"150px"}
-                style={{
-                    display: "inline-block",
-                    verticalAlign: "top"
-                }}
+                height={32}
                 onClick={e => {
                     onSubmit(e)
                 }}>
-                {LABELS.CREATE_LIST}
+                <AddIcon/>
             </Button>
-        </Pane>
+        </div>
     )
 };
 
