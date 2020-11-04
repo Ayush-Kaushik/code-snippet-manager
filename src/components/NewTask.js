@@ -6,8 +6,8 @@ import * as LABELS from "../constants/labels";
 
 const NewTask = () => {
     const [title, setTitle] = useState("");
-    const [notes, setNotes] = useState("");
     const [priority, setPriority] = useState(null);
+    const [dueDateTime, setDueDateTime] = useState(null);
     const fireStoreContext = useContext(FireStoreContext);
     const fireBaseContext = useContext(FirebaseContext);
 
@@ -17,7 +17,6 @@ const NewTask = () => {
         fireStoreContext.createNewTask({
             listId: fireBaseContext.initialUserState.selectedListId,
             title: title,
-            notes: notes,
             createDateTime: new Date().getSeconds()
         });
 

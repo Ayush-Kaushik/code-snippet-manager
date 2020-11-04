@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
-import {TextInputField, Button, Pane, InlineAlert} from 'evergreen-ui';
+import {TextInputField, Button, Pane} from 'evergreen-ui';
 import {FirebaseContext} from "../context/FirebaseContext";
 import * as ROUTES from "../constants/routes";
 import * as LABELS from "../constants/labels";
@@ -86,6 +86,11 @@ const SignUpForm = () => {
             if (errors.isError === false) {
                 try {
                     await firebaseContext.createUserWithEmailAndPassword(username, newPassword);
+
+                    if (!firebaseContext.initialUserState.email_verified) {
+                        history.push(ROUTES.EMAIL_VERIFICATION);
+                    }
+
                     history.push(ROUTES.HOME);
                 } catch (error) {
 

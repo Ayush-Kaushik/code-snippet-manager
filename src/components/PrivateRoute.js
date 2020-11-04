@@ -5,8 +5,19 @@ import * as ROUTES from "../constants/routes";
 
 const PrivateRoute = (props) => {
     const fireBaseContext = useContext(FirebaseContext);
-    return (fireBaseContext.initialUserState) ? <Route exact component={props.component} path={props.path}/>:
-            <Redirect to={ROUTES.SIGN_IN} />
+
+    if (fireBaseContext.initialUserState != null) {
+        console.log(fireBaseContext.initialUserState);
+
+        if (fireBaseContext.initialUserState.emailVerified) {
+            return (<Route exact component={props.component} path={props.path}/>);
+
+        } else {
+            return (<Redirect to={ROUTES.EMAIL_VERIFICATION}/>);
+        }
+    }
+
+    return (<Redirect to={ROUTES.SIGN_IN}/>);
 };
 
 export default PrivateRoute;

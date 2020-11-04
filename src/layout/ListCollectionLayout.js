@@ -12,7 +12,6 @@ const ListCollectionLayout = () => {
 
     useEffect(() => {
         if(fireBaseContext.initialUserState) {
-            console.log("This is called");
             fireStoreContext.streamList();
         }
     }, []);
