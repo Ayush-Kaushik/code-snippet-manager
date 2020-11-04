@@ -1,6 +1,6 @@
 import React, {createContext, useEffect, useState} from 'react';
 import {auth} from "../components/Firebase";
-import {Spinner, Pane} from "evergreen-ui";
+import {Spinner, Pane, Paragraph} from "evergreen-ui";
 
 export const FirebaseContext = createContext(null);
 
@@ -14,6 +14,10 @@ export const FirebaseProvider = (props) => {
 
     const signInWithEmailAndPassword = (email, password) => {
         return auth.signInWithEmailAndPassword(email, password);
+    }
+
+    const sendVerificationEmail = () => {
+        return auth.currentUser.sendEmailVerification();
     }
 
     const updatePassword = (password) => {
@@ -44,6 +48,7 @@ export const FirebaseProvider = (props) => {
                 justifyContent: "center",
                 height: "100vh"
             }}>
+                <Paragraph>{"Lets get some work done! "}</Paragraph>
                 <Spinner size={40}/>
             </Pane>
         )
@@ -56,7 +61,8 @@ export const FirebaseProvider = (props) => {
             signInWithEmailAndPassword: signInWithEmailAndPassword,
             signOut: signOut,
             updateEmail: updateEmail,
-            updatePassword: updatePassword
+            updatePassword: updatePassword,
+            sendVerificationEmail: sendVerificationEmail
         }}>
             {props.children}
         </FirebaseContext.Provider>
