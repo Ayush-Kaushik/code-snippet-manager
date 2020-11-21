@@ -1,5 +1,14 @@
-import React, {useContext, useState} from 'react';
-import {Button, TextInput, AddIcon, FlagIcon, CrossIcon, SelectMenu, Tooltip, TimeIcon} from "evergreen-ui";
+import React, {useContext, useState} from "react";
+import {
+    Button,
+    TextInput,
+    AddIcon,
+    FlagIcon,
+    CrossIcon,
+    SelectMenu,
+    Tooltip,
+    TimeIcon,
+} from "evergreen-ui";
 import {FireStoreContext} from "../context/FireStoreContext";
 import {FirebaseContext} from "../context/FirebaseContext";
 import * as LABELS from "../constants/labels";
@@ -17,28 +26,30 @@ const NewTask = () => {
         fireStoreContext.createNewTask({
             listId: fireBaseContext.initialUserState.selectedListId,
             title: title,
-            createDateTime: new Date().getSeconds()
+            createDateTime: new Date().getSeconds(),
         });
 
         fireStoreContext.streamList();
         setTitle("");
-    }
+    };
 
     return (
         <div
             style={{
                 display: "flex",
-                flexDirection: "column"
+                flexDirection: "column",
             }}
         >
-            <div style={{
-                display: "flex",
-                justifyContent: "flex-start",
-                marginBottom: "5px"
-            }}>
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "flex-start",
+                    marginBottom: "5px",
+                }}
+            >
                 <TextInput
                     style={{
-                        marginRight: "2px"
+                        marginRight: "2px",
                     }}
                     type="text"
                     name={"title"}
@@ -46,13 +57,16 @@ const NewTask = () => {
                     height={32}
                     label={"Title"}
                     placeholder={"eg. Finish CI/CD pipeline"}
-                    onChange={e => {
-                        setTitle(e.target.value)
-                    }}/>
+                    onChange={(e) => {
+                        setTitle(e.target.value);
+                    }}
+                />
 
-                <div style={{
-                    marginRight: "2px"
-                }}>
+                <div
+                    style={{
+                        marginRight: "2px",
+                    }}
+                >
                     <Tooltip content={"Priority"}>
                         <SelectMenu
                             height={100}
@@ -61,52 +75,54 @@ const NewTask = () => {
                             hasFilter={false}
                             selected={priority}
                             options={LABELS.PRIORITY}
-                            onSelect={e => setPriority(e.target.value)}
+                            onSelect={(e) => setPriority(e.target.value)}
                         >
                             <Button>
-                                <FlagIcon/>
+                                <FlagIcon />
                             </Button>
                         </SelectMenu>
                     </Tooltip>
                 </div>
-                <Button
-                >
-                    <TimeIcon/>
+                <Button>
+                    <TimeIcon />
                 </Button>
             </div>
 
-            <div style={{
-                display: "flex",
-                justifyContent: "flex-start"
-            }}>
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "flex-start",
+                }}
+            >
                 <Button
                     style={{
-                        marginRight: "2px"
+                        marginRight: "2px",
                     }}
                     appearance="primary"
                     iconBefore={AddIcon}
                     intent="success"
-                    onClick={e => {
-                        onSubmit(e)
-                    }}>
+                    onClick={(e) => {
+                        onSubmit(e);
+                    }}
+                >
                     {"Add Task"}
                 </Button>
                 <Button
                     style={{
-                        marginRight: "2px"
+                        marginRight: "2px",
                     }}
                     appearance="primary"
                     iconBefore={CrossIcon}
                     intent={"danger"}
-                    onSubmit={e => {
+                    onSubmit={(e) => {
                         console.log("scratch that bro");
-                    }}>
+                    }}
+                >
                     {"Cancel"}
                 </Button>
-
             </div>
         </div>
-    )
+    );
 };
 
 export default NewTask;

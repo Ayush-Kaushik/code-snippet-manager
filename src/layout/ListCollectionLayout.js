@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect} from "react";
 import {FireStoreContext} from "../context/FireStoreContext";
 import {TrashIcon, Paragraph, Button} from "evergreen-ui";
 import * as ROUTES from "../constants/routes";
@@ -11,58 +11,57 @@ const ListCollectionLayout = () => {
     const history = useHistory();
 
     useEffect(() => {
-        if(fireBaseContext.initialUserState) {
+        if (fireBaseContext.initialUserState) {
             fireStoreContext.streamList();
         }
-    }, []);
+    }, [fireBaseContext.initialUserState, fireStoreContext]);
 
     return (
         <div>
             <div>
-                {
-                    fireStoreContext.initialStore.list.map((item) => {
-                        return (
-                            <div
-                                key={item.id}
+                {fireStoreContext.initialStore.list.map((item) => {
+                    return (
+                        <div
+                            key={item.id}
+                            style={{
+                                display: "flex",
+                                padding: "15px",
+                                marginRight: "5px",
+                                alignItems: "center",
+                            }}
+                            onClick={() => {
+                                console.log(`This div is clicked: ${item.id}`);
+                                fireStoreContext.streamListTasks(item.id);
+                                history.push(ROUTES.HOME);
+                            }}
+                        >
+                            <Paragraph
+                                size={300}
                                 style={{
-                                    display: "flex",
-                                    padding: "15px",
-                                    marginRight: "5px",
-                                    alignItems: "center"
-                                }}
-
-                                onClick={() => {
-                                    console.log(`This div is clicked: ${item.id}`)
-                                    fireStoreContext.streamListTasks(item.id)
-                                    history.push(ROUTES.HOME);
+                                    overflowX: "hidden",
+                                    textOverflow: "ellipsis",
+                                    width: "70%",
                                 }}
                             >
-                                <Paragraph
-                                    size={300}
-                                    style={{
-                                        overflowX: "hidden",
-                                        textOverflow: "ellipsis",
-                                        width: "70%"
-                                    }}
-                                >{item.title}</Paragraph>
+                                {item.title}
+                            </Paragraph>
 
-                                <Button color={"danger"}
-                                        appearance="minimal"
-                                        intent="danger"
-                                        margin={"5px"}
-                                        height={20}
-                                        onClick={() => {
-
-                                        }}>
-                                    <TrashIcon/>
-                                </Button>
-                            </div>
-                        )
-                    })
-                }
+                            <Button
+                                color={"danger"}
+                                appearance="minimal"
+                                intent="danger"
+                                margin={"5px"}
+                                height={20}
+                                onClick={() => {}}
+                            >
+                                <TrashIcon />
+                            </Button>
+                        </div>
+                    );
+                })}
             </div>
         </div>
-    )
+    );
 };
 
 export default ListCollectionLayout;

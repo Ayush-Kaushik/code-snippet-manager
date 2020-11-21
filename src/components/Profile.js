@@ -16,7 +16,7 @@ const Profile = () => {
         isError: null,
         username: "",
         newPassword: "",
-        confirmPassword: ""
+        confirmPassword: "",
     });
 
     const onSubmit = (e) => {
@@ -25,48 +25,43 @@ const Profile = () => {
 
         if (!EmailValidator.validate(username)) {
             formHasError = true;
-            setErrors(prevState => {
+            setErrors((prevState) => {
                 return {
                     ...prevState,
                     isError: true,
-                    username: "Please provide a valid username"
-                }
+                    username: "Please provide a valid username",
+                };
             });
         }
 
         if (newPassword !== confirmPassword) {
             console.log("This should be true");
             formHasError = true;
-            setErrors(prevState => {
-
+            setErrors((prevState) => {
                 console.log("print this out");
 
                 return {
                     ...prevState,
                     isError: true,
-                    confirmPassword: "Passwords do not match"
-                }
+                    confirmPassword: "Passwords do not match",
+                };
             });
         }
 
         if (!formHasError) {
             console.log("form has error");
-            setErrors(prevState => (
-                {
-                    ...prevState,
-                    isError: false
-                }
-            ))
+            setErrors((prevState) => ({
+                ...prevState,
+                isError: false,
+            }));
         }
-    }
-
+    };
 
     useEffect(() => {
         (async () => {
             console.log("This is called");
 
             if (errors.isError === false) {
-
                 const promises = [];
                 if (username !== firebaseContext.initialUserState.email) {
                     promises.push(firebaseContext.updateEmail(username));
@@ -76,48 +71,53 @@ const Profile = () => {
                     promises.push(firebaseContext.updatePassword(newPassword));
                 }
 
-                Promise.all(promises).then(() => {
-                    history.push(ROUTES.HOME);
-                }).catch((error) => {
-
-                    setErrors((prevState) => (
-                        {
+                Promise.all(promises)
+                    .then(() => {
+                        history.push(ROUTES.HOME);
+                    })
+                    .catch((error) => {
+                        setErrors((prevState) => ({
                             ...prevState,
                             isError: true,
-                            username: error.message
-                        }
-                    ))
-                })
+                            username: error.message,
+                        }));
+                    });
             }
         })();
-    }, [errors.isError]);
+    }, [errors.isError, firebaseContext, history, newPassword, username]);
 
     return (
-        <div style={{
-            width: "100%",
-            height: "100%",
-            backgroundColor: "#EDF0F2",
-        }}>
+        <div
+            style={{
+                width: "100%",
+                height: "100%",
+                backgroundColor: "#EDF0F2",
+            }}
+        >
             <div
                 style={{
                     marginTop: "10%",
                     width: "40%",
                     marginRight: "30%",
-                    marginLeft: "30%"
-                }}>
+                    marginLeft: "30%",
+                }}
+            >
                 <TextInputField
                     type="text"
                     name={"username"}
                     value={username}
                     label={LABELS.USERNAME}
-                    validationMessage={(errors.username.length > 0) ? errors.username : false}
-                    onChange={e => {
-                        setErrors(prevState => ({
+                    validationMessage={
+                        errors.username.length > 0 ? errors.username : false
+                    }
+                    onChange={(e) => {
+                        setErrors((prevState) => ({
                             ...prevState,
-                            username: ""
-                        }))
-                        setUsername(e.target.value)
-                    }}/>
+                            username: "",
+                        }));
+                        setUsername(e.target.value);
+                    }}
+                />
 
                 <TextInputField
                     type="password"
@@ -125,14 +125,17 @@ const Profile = () => {
                     label={LABELS.NEW_PASSWORD}
                     placeholder={"leave blank to keep the same"}
                     value={newPassword}
-                    validationMessage={(errors.newPassword.length > 0) ? errors.newPassword : false}
-                    onChange={e => {
-                        setErrors(prevState => ({
+                    validationMessage={
+                        errors.newPassword.length > 0 ? errors.newPassword : false
+                    }
+                    onChange={(e) => {
+                        setErrors((prevState) => ({
                             ...prevState,
-                            newPassword: ""
-                        }))
-                        setNewPassword(e.target.value)
-                    }}/>
+                            newPassword: "",
+                        }));
+                        setNewPassword(e.target.value);
+                    }}
+                />
 
                 <TextInputField
                     type="password"
@@ -140,27 +143,30 @@ const Profile = () => {
                     placeholder={"leave blank to keep the same"}
                     label={LABELS.CONFIRM_NEW_PASSWORD}
                     value={confirmPassword}
-                    validationMessage={(errors.confirmPassword.length > 0) ? errors.confirmPassword : false}
-                    onChange={e => {
-                        setErrors(prevState => ({
+                    validationMessage={
+                        errors.confirmPassword.length > 0 ? errors.confirmPassword : false
+                    }
+                    onChange={(e) => {
+                        setErrors((prevState) => ({
                             ...prevState,
-                            confirmPassword: ""
-                        }))
-                        setConfirmPassword(e.target.value)
+                            confirmPassword: "",
+                        }));
+                        setConfirmPassword(e.target.value);
                     }}
                 />
 
                 <Button
                     appearance="primary"
                     intent="success"
-                    onClick={e => {
-                        onSubmit(e)
-                    }}>
+                    onClick={(e) => {
+                        onSubmit(e);
+                    }}
+                >
                     Update
                 </Button>
             </div>
         </div>
-    )
+    );
 };
 
 export default Profile;

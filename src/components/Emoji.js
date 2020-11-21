@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const Emoji = (props) => {
     return (
@@ -9,7 +9,7 @@ const Emoji = (props) => {
         >
             {props.symbol}
         </span>
-    )
+    );
 };
 
 export default Emoji;

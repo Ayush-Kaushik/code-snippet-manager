@@ -1,6 +1,6 @@
-import React, {useState, useContext, useEffect} from 'react';
-import {useHistory} from 'react-router-dom';
-import {TextInputField, Button, Pane} from 'evergreen-ui';
+import React, {useState, useContext, useEffect} from "react";
+import {useHistory} from "react-router-dom";
+import {TextInputField, Button, Pane} from "evergreen-ui";
 import * as ROUTES from "../constants/routes";
 import * as LABELS from "../constants/labels";
 import {FirebaseContext} from "../context/FirebaseContext";
@@ -14,7 +14,7 @@ const SignInForm = () => {
     const [errors, setErrors] = useState({
         isError: null,
         username: "",
-        password: ""
+        password: "",
     });
 
     const onSubmit = async (e) => {
@@ -24,41 +24,42 @@ const SignInForm = () => {
 
         if (!EmailValidator.validate(username)) {
             formHasError = true;
-            setErrors(prevState => {
+            setErrors((prevState) => {
                 return {
                     ...prevState,
                     isError: true,
-                    username: "Please provide a valid username"
-                }
+                    username: "Please provide a valid username",
+                };
             });
         }
 
         if (password.length <= 0) {
             formHasError = true;
-            setErrors(prevState => {
+            setErrors((prevState) => {
                 return {
                     ...prevState,
                     isError: true,
-                    password: "Please provide a password"
-                }
+                    password: "Please provide a password",
+                };
             });
         }
 
         if (!formHasError) {
-            setErrors(prevState => (
-                {
-                    ...prevState,
-                    isError: false
-                }
-            ))
+            setErrors((prevState) => ({
+                ...prevState,
+                isError: false,
+            }));
         }
-    }
+    };
 
-    useEffect((() => {
+    useEffect(() => {
         (async () => {
             if (errors.isError === false) {
                 try {
-                    const authState = await firebaseContext.signInWithEmailAndPassword(username, password);
+                    const authState = await firebaseContext.signInWithEmailAndPassword(
+                        username,
+                        password
+                    );
                     console.log(firebaseContext.initialUserState);
 
                     if (authState.user) {
@@ -71,42 +72,35 @@ const SignInForm = () => {
                         history.push(ROUTES.SIGN_IN);
                     }
                 } catch (error) {
-
                     switch (error.code) {
                         case "auth/wrong-password":
-                            setErrors((prevState) => (
-                                {
-                                    ...prevState,
-                                    isError: true,
-                                    password: error.message
-                                }
-                            ))
+                            setErrors((prevState) => ({
+                                ...prevState,
+                                isError: true,
+                                password: error.message,
+                            }));
                             break;
 
                         case "auth/user-not-found":
-                            setErrors((prevState) => (
-                                {
-                                    ...prevState,
-                                    isError: true,
-                                    username: error.message
-                                }
-                            ))
+                            setErrors((prevState) => ({
+                                ...prevState,
+                                isError: true,
+                                username: error.message,
+                            }));
                             break;
 
                         default:
-                            setErrors((prevState) => (
-                                {
-                                    ...prevState,
-                                    isError: true,
-                                    username: error.message
-                                }
-                            ))
+                            setErrors((prevState) => ({
+                                ...prevState,
+                                isError: true,
+                                username: error.message,
+                            }));
                             break;
                     }
                 }
             }
         })();
-    }), [errors.isError]);
+    }, [errors.isError, firebaseContext, history, password, username]);
 
     return (
         <Pane
@@ -119,39 +113,46 @@ const SignInForm = () => {
             padding={"1.5vw"}
             style={{
                 backgroundColor: "#EDF0F2",
-                borderRadius: "5px"
+                borderRadius: "5px",
             }}
         >
-            <img src={require('../assets/images/logo_new.png')} height={250} width={250} alt={LABELS.SIGN_IN}/>
+            <img
+                src={require("../assets/images/logo_new.png")}
+                height={250}
+                width={250}
+                alt={LABELS.SIGN_IN}
+            />
             <TextInputField
                 type="text"
                 name={"username"}
                 value={username}
                 label={LABELS.USERNAME}
-                isInvalid={(errors.username.length > 0)}
-                validationMessage={(errors.username.length > 0) ? errors.username : false}
-                onChange={e => {
-                    setErrors(prevState => ({
+                isInvalid={errors.username.length > 0}
+                validationMessage={errors.username.length > 0 ? errors.username : false}
+                onChange={(e) => {
+                    setErrors((prevState) => ({
                         ...prevState,
-                        username: ""
-                    }))
-                    setUsername(e.target.value)
-                }}/>
+                        username: "",
+                    }));
+                    setUsername(e.target.value);
+                }}
+            />
 
             <TextInputField
                 type="password"
                 name={"password"}
                 label={LABELS.PASSWORD}
-                isInvalid={(errors.password.length > 0)}
-                validationMessage={(errors.password.length > 0) ? errors.password : false}
+                isInvalid={errors.password.length > 0}
+                validationMessage={errors.password.length > 0 ? errors.password : false}
                 value={password}
-                onChange={e => {
-                    setErrors(prevState => ({
+                onChange={(e) => {
+                    setErrors((prevState) => ({
                         ...prevState,
-                        password: ""
-                    }))
-                    setPassword(e.target.value)
-                }}/>
+                        password: "",
+                    }));
+                    setPassword(e.target.value);
+                }}
+            />
 
             <Button
                 appearance="primary"
@@ -160,11 +161,12 @@ const SignInForm = () => {
                 width={"150px"}
                 style={{
                     display: "inline-block",
-                    verticalAlign: "top"
+                    verticalAlign: "top",
                 }}
-                onClick={e => {
-                    onSubmit(e)
-                }}>
+                onClick={(e) => {
+                    onSubmit(e);
+                }}
+            >
                 {LABELS.SIGN_IN}
             </Button>
 
@@ -172,11 +174,12 @@ const SignInForm = () => {
                 appearance="primary"
                 margin={"5px"}
                 width={"150px"}
-                onClick={() => history.push(ROUTES.SIGN_UP)}>
+                onClick={() => history.push(ROUTES.SIGN_UP)}
+            >
                 {LABELS.CREATE_ACCOUNT}
             </Button>
         </Pane>
-    )
-}
+    );
+};
 
 export default SignInForm;

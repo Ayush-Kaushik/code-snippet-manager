@@ -1,10 +1,10 @@
 export const sidebar = [
     {
         label: "Lists",
-        path: "/home"
+        path: "/home",
     },
     {
         label: "profile",
-        path: "/"
-    }
+        path: "/",
+    },
 ];
