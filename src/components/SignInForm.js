@@ -25,10 +25,10 @@ const SignInForm = () => {
     });
 
     useEffect(() => {
-        if(firebaseContext.initialUserState) {
-            if(firebaseContext.initialUserState.emailVerified) {
+        if (firebaseContext.initialUserState) {
+            if (firebaseContext.initialUserState.emailVerified) {
                 history.push(ROUTES.HOME);
-            } 
+            }
         }
     }, [])
 
@@ -76,6 +76,11 @@ const SignInForm = () => {
         <div className="form-layout">
             <div>{creds.errors.length !== 0 ? JSON.stringify(creds.errors) : false}</div>
 
+            <div>
+                <img src={require('../assets/checkmark.png')} height={150} width={150} alt={LABELS.SIGN_IN}/>
+                <img src={require('../assets/write.png')} height={150} width={150} alt={LABELS.SIGN_IN}/>
+            </div>
+
             <label htmlFor="username">{LABELS.USERNAME}</label>
             <input
                 type="text"
@@ -105,22 +110,25 @@ const SignInForm = () => {
                 }}
             />
 
-            <button
-                onClick={(e) => {
-                    onSubmit(e);
-                }}
-            >
-                {LABELS.SIGN_IN}
-            </button>
+            <div>
+                <button
+                    className="success-button"
+                    onClick={(e) => {
+                        onSubmit(e);
+                    }}
+                >
+                    {LABELS.SIGN_IN}
+                </button>
 
-            <button
-                onClick={() => history.push(ROUTES.SIGN_UP)}
-            >
-                {LABELS.CREATE_ACCOUNT}
-            </button>
+                <button
+                    className="create-account-button"
+                    onClick={() => history.push(ROUTES.SIGN_UP)}
+                >
+                    {LABELS.CREATE_ACCOUNT}
+                </button>
+            </div>
         </div>
     );
-
 }
 
 export default SignInForm;
