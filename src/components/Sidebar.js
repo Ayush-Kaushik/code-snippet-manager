@@ -26,11 +26,11 @@ const SideBar = () => {
     const firebaseContext = useContext(FirebaseContext);
 
     return (
-        <div>
+        <div className="sidebar">
             {sideBarContent.map((item, index) => {
                 if (item.label === "SignOut") {
                     return (
-                        <div
+                        <a
                             key={index}
                             id={index}
                             onClick={() => {
@@ -38,7 +38,7 @@ const SideBar = () => {
                             }}
                         >
                             {item.label}
-                        </div>
+                        </a>
                     );
                 } else {
                     return (

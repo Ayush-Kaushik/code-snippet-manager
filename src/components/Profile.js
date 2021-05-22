@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import * as LABELS from "../constants/labels";
 import * as ROUTES from "../constants/routes";
 import { FirebaseContext } from "../context/FirebaseContext";
@@ -82,8 +82,7 @@ const Profile = () => {
             />
 
             <button
-                appearance="primary"
-                intent="success"
+                className="success-button"
                 onClick={(e) => {
                     onSubmit(e);
                 }}

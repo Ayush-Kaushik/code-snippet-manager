@@ -1,33 +1,38 @@
 import React, { useContext, useState } from "react";
+import { FirebaseContext } from "../context/FirebaseContext";
 import { FireStoreContext } from "../context/FireStoreContext";
 
 const NewTask = () => {
     const fireStoreContext = useContext(FireStoreContext);
+    const firstBaseContext = useContext(FirebaseContext);
 
     const [taskInput, setTaskInput] = useState({
-        title: ""
+        title: "",
+        isActive: true
     });
 
     const onSubmit = (e) => {
         e.preventDefault();
 
-        fireStoreContext.createNewTask({
-            title: taskInput.title
-        });
+        console.log(firstBaseContext);
 
-        fireStoreContext.streamList();
+        fireStoreContext.createNewTask(
+            firstBaseContext.initialUserState.email,
+            {
+                title: taskInput.title,
+                isActive: true
+            });
     };
 
     return (
-        <div>
+        <div className="newtask-layout">
             <input
                 type="text"
                 value={taskInput.title}
-                label={"Title"}
-                placeholder={"eg. Finish CI/CD pipeline"}
+                placeholder={"eg. Get groceries"}
                 onChange={(e) => {
+                    let newTitleInput = e.target.value;
                     setTaskInput((prevState) => {
-                        let newTitleInput = e.target.value;
                         return {
                             ...prevState,
                             title: newTitleInput
@@ -35,20 +40,25 @@ const NewTask = () => {
                     });
                 }}
             />
-            <button
-                onClick={(e) => {
-                    onSubmit(e);
-                }}
-            >
-                {"Add Task"}
-            </button>
-            <button
-                onSubmit={(e) => {
-                    console.log("scratch that bro");
-                }}
-            >
-                {"Cancel"}
-            </button>
+
+            <div>
+                <button
+                    className="button success-button"
+                    onClick={(e) => {
+                        onSubmit(e);
+                    }}
+                >
+                    {"Add Task"}
+                </button>
+                <button className="button fail-button"
+                    onSubmit={(e) => {
+                        console.log("scratch that bro");
+                    }}
+                >
+                    {"Cancel"}
+                </button>
+            </div>
+
         </div>
     );
 };

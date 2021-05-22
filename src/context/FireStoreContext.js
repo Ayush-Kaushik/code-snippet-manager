@@ -60,13 +60,14 @@ export const FireStoreProvider = (props) => {
      * @param taskDetails - task details to be added
      * @returns {Promise<firebase.firestore.DocumentReference<firebase.firestore.DocumentData>>}
      */
-    const createNewTask = (listId, taskDetails) => {
-        return fireStore.collection(listId).add({
-            completed: "",
-            createdDateTime: firebase.firestore.FieldValue.serverTimestamp(),
-            description: taskDetails.description,
-            priority: taskDetails.priority,
+    const createNewTask = (collectionId, taskDetails) => {
+
+        console.log(collectionId);
+        console.log(taskDetails);
+
+        return fireStore.collection(collectionId).add({
             title: taskDetails.title,
+            isActive: taskDetails.isActive
         });
     };
 
