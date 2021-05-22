@@ -7,13 +7,8 @@ import PrivateRoute from "./components/PrivateRoute";
 import SideBar from "./components/Sidebar";
 import ProfileLayout from "./layout/ProfileLayout";
 import {FirebaseContext} from "./context/FirebaseContext";
-import TaskCollectionLayout from "./layout/TaskCollectionLayout";
+import TaskListLayout from "./layout/TaskListLayout";
 import EmailVerificationLayout from "./layout/EmailVerificationLayout";
-
-const backgroundStyle = {
-    display: "flex",
-    flexDirection: "row",
-};
 
 const showSideBar = (initialUserState) => {
     if (initialUserState) {
@@ -29,15 +24,7 @@ function App() {
     return (
         <div>
             <Router>
-                <div style={backgroundStyle}>
                     {showSideBar(firebaseContext.initialUserState)}
-                    <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            width: "100%",
-                        }}
-                    >
                         <Route exact path={ROUTES.SIGN_UP} component={SignUpLayout} />
                         <Route exact path={ROUTES.SIGN_IN} component={SignInLayout} />
                         <Route
@@ -48,20 +35,18 @@ function App() {
                         <PrivateRoute
                             exact
                             path={ROUTES.HOME}
-                            component={TaskCollectionLayout}
+                            component={TaskListLayout}
                         />
                         <PrivateRoute
                             exact
                             path={ROUTES.LANDING}
-                            component={TaskCollectionLayout}
+                            component={TaskListLayout}
                         />
                         <PrivateRoute
                             exact
                             path={ROUTES.PROFILE}
                             component={ProfileLayout}
                         />
-                    </div>
-                </div>
             </Router>
         </div>
     );

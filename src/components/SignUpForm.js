@@ -1,178 +1,127 @@
-import React, {useContext, useEffect, useState} from "react";
-import {useHistory} from "react-router-dom";
-import {TextInputField, Button, Pane} from "evergreen-ui";
-import {FirebaseContext} from "../context/FirebaseContext";
+import React, { useContext, useState, useEffect } from "react";
+import Joi from 'joi';
+import { useHistory } from "react-router-dom";
+import { FirebaseContext } from "../context/FirebaseContext";
 import * as ROUTES from "../constants/routes";
 import * as LABELS from "../constants/labels";
-import * as EmailValidator from "email-validator";
+import { FireStoreContext } from "../context/FireStoreContext";
+
+const signUpSchema = Joi.object().keys({
+    username: Joi.string().email({ tlds: { allow: false } }).required(),
+    newPassword: Joi.string().required().min(5),
+    confirmNewPassword: Joi.string().required().min(5)
+});
 
 const SignUpForm = () => {
     const history = useHistory();
     const firebaseContext = useContext(FirebaseContext);
+    const firestoreContext = useContext(FireStoreContext);
 
-    const [username, setUsername] = useState("");
-    const [newPassword, setNewPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const [errors, setErrors] = useState({
-        isError: null,
+    useEffect(() => {
+        if(firebaseContext.initialUserState) {
+            if(firebaseContext.initialUserState.emailVerified) {
+                history.push(ROUTES.HOME);
+            } 
+        }
+    }, [])
+
+    const [creds, setCreds] = useState({
         username: "",
         newPassword: "",
-        confirmPassword: "",
+        confirmNewPassword: ""
     });
+
+    const [metaData, setMetaData] = useState({
+        isError: false,
+        errors: []
+    })
 
     const onSubmit = async (e) => {
         e.preventDefault();
-        let formHasError = false;
 
-        if (!EmailValidator.validate(username)) {
-            formHasError = true;
-            setErrors((prevState) => {
-                return {
+        try {
+            let valid = signUpSchema.validate(creds, { abortEarly: false });
+            if (valid.error) {
+                console.log(valid);
+                setMetaData((prevState) => ({
                     ...prevState,
                     isError: true,
-                    username: "Please provide a valid username",
-                };
-            });
-        }
+                    errors: valid.error.details
+                }));
+            } else {
+                await firebaseContext.createUserWithEmailAndPassword(
+                    creds.username,
+                    creds.newPassword
+                );
 
-        if (newPassword.length <= 0) {
-            formHasError = true;
-            setErrors((prevState) => {
-                return {
-                    ...prevState,
-                    isError: true,
-                    newPassword: "Please provide a password",
-                };
-            });
-        }
+                await firestoreContext.initializeCollection(creds.username);
 
-        if (confirmPassword.length <= 0) {
-            formHasError = true;
-            setErrors((prevState) => {
-                return {
-                    ...prevState,
-                    isError: true,
-                    confirmPassword: "Please provide a password",
-                };
-            });
-        }
+                if (!firebaseContext.initialUserState.email_verified) {
+                    history.push(ROUTES.EMAIL_VERIFICATION);
+                }
 
-        if (newPassword !== confirmPassword) {
-            formHasError = true;
-            setErrors((prevState) => {
-                return {
-                    ...prevState,
-                    isError: true,
-                    confirmPassword: "Passwords do not match",
-                };
-            });
-        }
-
-        if (!formHasError) {
-            setErrors((prevState) => ({
+                history.push(ROUTES.HOME);
+            }
+        } catch (error) {
+            console.log(error);
+            setMetaData((prevState) => ({
                 ...prevState,
-                isError: false,
+                isError: true,
+                errors: error.message,
             }));
         }
     };
 
-    useEffect(() => {
-        (async () => {
-            if (errors.isError === false) {
-                try {
-                    await firebaseContext.createUserWithEmailAndPassword(
-                        username,
-                        newPassword
-                    );
-
-                    if (!firebaseContext.initialUserState.email_verified) {
-                        history.push(ROUTES.EMAIL_VERIFICATION);
-                    }
-
-                    history.push(ROUTES.HOME);
-                } catch (error) {
-                    switch (error.code) {
-                        default:
-                            setErrors((prevState) => ({
-                                ...prevState,
-                                isError: true,
-                                username: error.message,
-                            }));
-                            break;
-                    }
-                }
-            }
-        })();
-    }, [errors.isError, firebaseContext, history, newPassword, username]);
-
     return (
-        <Pane
-            elevation={3}
-            display={"flex"}
-            justifyContent="center"
-            alignItems="center"
-            flexDirection="column"
-            flexWrap={"wrap"}
-            padding={"1.5vw"}
-            style={{
-                backgroundColor: "#EDF0F2",
-                borderRadius: "5px",
-            }}
-        >
-            <img
-                src={require("../assets/images/logo_new.png")}
-                height={250}
-                width={200}
-                alt={LABELS.SIGN_UP}
-            />
-            <TextInputField
+        <div className="form-layout">
+            <div>{metaData.errors.length !== 0 ? JSON.stringify(metaData.errors) : false}</div>
+
+            <label htmlFor="username">{LABELS.USERNAME}</label>
+            <input
                 type="text"
                 name={"username"}
-                value={username}
+                value={creds.username}
                 label={LABELS.USERNAME}
-                validationMessage={errors.username > 0 ? errors.username : false}
                 onChange={(e) => {
-                    setErrors((prevState) => ({
+                    let userNameInput = e.target.value;
+                    setCreds((prevState) => ({
                         ...prevState,
-                        username: "",
+                        username: userNameInput,
                     }));
-                    setUsername(e.target.value);
                 }}
             />
 
-            <TextInputField
+            <label htmlFor="password">{LABELS.NEW_PASSWORD}</label>
+            <input
                 type="password"
                 name={"password"}
                 label={LABELS.NEW_PASSWORD}
-                value={newPassword}
-                validationMessage={errors.newPassword > 0 ? errors.newPassword : false}
+                value={creds.newPassword}
                 onChange={(e) => {
-                    setErrors((prevState) => ({
+                    let newPassWordInput = e.target.value;
+                    setCreds((prevState) => ({
                         ...prevState,
-                        newPassword: "",
+                        newPassword: newPassWordInput,
                     }));
-                    setNewPassword(e.target.value);
                 }}
             />
 
-            <TextInputField
+            <label htmlFor="confirmPassword">{LABELS.CONFIRM_NEW_PASSWORD}</label>
+            <input
                 type="password"
-                name={"password"}
+                name={"confirmPassword"}
                 label={LABELS.CONFIRM_NEW_PASSWORD}
-                value={confirmPassword}
-                validationMessage={
-                    errors.confirmPassword > 0 ? errors.confirmPassword : false
-                }
+                value={creds.confirmPassword}
                 onChange={(e) => {
-                    setErrors((prevState) => ({
+                    let confirmPasswordInput = e.target.value;
+                    setCreds((prevState) => ({
                         ...prevState,
-                        confirmPassword: "",
+                        confirmNewPassword: confirmPasswordInput
                     }));
-                    setConfirmPassword(e.target.value);
                 }}
             />
 
-            <Button
+            <button
                 appearance="primary"
                 intent="success"
                 onClick={(e) => {
@@ -180,8 +129,14 @@ const SignUpForm = () => {
                 }}
             >
                 SignUp
-            </Button>
-        </Pane>
+            </button>
+
+            <button
+                onClick={() => history.push(ROUTES.SIGN_IN)}
+            >
+                {LABELS.ALREADY_A_USER}
+            </button>
+        </div>
     );
 };
 
