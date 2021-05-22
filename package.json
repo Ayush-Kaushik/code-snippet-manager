@@ -1,15 +1,13 @@
 {
-  "name": "todo",
+  "name": "getitdone",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
-    "email-validator": "^2.0.4",
-    "evergreen-ui": "^5.1.2",
     "firebase": "^7.24.0",
-    "framer-motion": "^2.9.1",
+    "joi": "^17.4.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-form": "^4.0.1",
@@ -18,15 +16,50 @@
     "serve": "^11.3.2",
     "uuid": "^8.3.0"
   },
+  "prettier": {
+    "printWidth": 90,
+    "bracketSpacing": false,
+    "trailingComma": "es5",
+    "semi": true,
+    "tabWidth": 4
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint && npm run format"
+    }
+  },
   "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
     "start": "serve -s build",
     "start-dev": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "format": "prettier --write \"**/*.+(js|jsx|json|yml|yaml|css|md|vue)\""
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "env": {
+      "commonjs": false,
+      "es6": true,
+      "node": true,
+      "jest": true
+    },
+    "plugins": [
+      "import"
+    ],
+    "extends": [
+      "react-app",
+      "plugin:prettier/recommended"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 2018
+    },
+    "rules": {
+      "no-console": "warn",
+      "no-eval": "error",
+      "import/first": "error"
+    }
   },
   "browserslist": {
     "production": [
@@ -39,5 +72,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "lint-staged": "^10.5.1",
+    "prettier": "^2.2.0"
   }
 }

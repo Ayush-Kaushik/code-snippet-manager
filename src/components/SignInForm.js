@@ -1,182 +1,126 @@
-import React, {useState, useContext, useEffect} from 'react';
-import {useHistory} from 'react-router-dom';
-import {TextInputField, Button, Pane} from 'evergreen-ui';
+import React, { useState, useContext, useEffect } from "react";
+import Joi from 'joi';
+import { useHistory } from "react-router-dom";
 import * as ROUTES from "../constants/routes";
+import { FirebaseContext } from "../context/FirebaseContext";
 import * as LABELS from "../constants/labels";
-import {FirebaseContext} from "../context/FirebaseContext";
-import * as EmailValidator from "email-validator";
+import "../App.css";
+
+const signInSchema = Joi.object().keys({
+    username: Joi.string().email({ tlds: { allow: false } }).required(),
+    password: Joi.string().required().min(8),
+    isError: Joi.boolean().required(),
+    errors: Joi.array()
+});
 
 const SignInForm = () => {
     const firebaseContext = useContext(FirebaseContext);
     const history = useHistory();
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [errors, setErrors] = useState({
-        isError: null,
+
+    const [creds, setCreds] = useState({
         username: "",
-        password: ""
+        password: "",
+        isError: false,
+        errors: []
     });
+
+    useEffect(() => {
+        if(firebaseContext.initialUserState) {
+            if(firebaseContext.initialUserState.emailVerified) {
+                history.push(ROUTES.HOME);
+            } 
+        }
+    }, [])
 
     const onSubmit = async (e) => {
         e.preventDefault();
 
-        let formHasError = false;
+        try {
+            let valid = signInSchema.validate(creds, { abortEarly: false });
 
-        if (!EmailValidator.validate(username)) {
-            formHasError = true;
-            setErrors(prevState => {
-                return {
+            if (valid.error) {
+                setCreds((prevState) => ({
                     ...prevState,
                     isError: true,
-                    username: "Please provide a valid username"
-                }
-            });
-        }
+                    errors: valid.error.details
+                }));
+            } else {
+                const authState = await firebaseContext.signInWithEmailAndPassword(
+                    creds.username,
+                    creds.password
+                );
 
-        if (password.length <= 0) {
-            formHasError = true;
-            setErrors(prevState => {
-                return {
-                    ...prevState,
-                    isError: true,
-                    password: "Please provide a password"
+                if (authState.user) {
+                    if (authState.user.emailVerified) {
+                        history.push(ROUTES.HOME);
+                    } else {
+                        history.push(ROUTES.EMAIL_VERIFICATION);
+                    }
+                } else {
+                    history.push(ROUTES.SIGN_IN);
                 }
-            });
-        }
+            }
+        } catch (error) {
+            console.log(error);
 
-        if (!formHasError) {
-            setErrors(prevState => (
-                {
-                    ...prevState,
-                    isError: false
-                }
-            ))
+            setCreds((prevState) => ({
+                ...prevState,
+                isError: true,
+                errors: error.message,
+            }));
         }
     }
 
-    useEffect((() => {
-        (async () => {
-            if (errors.isError === false) {
-                try {
-                    const authState = await firebaseContext.signInWithEmailAndPassword(username, password);
-                    console.log(firebaseContext.initialUserState);
-
-                    if (authState.user) {
-                        if (authState.user.emailVerified) {
-                            history.push(ROUTES.HOME);
-                        } else {
-                            history.push(ROUTES.EMAIL_VERIFICATION);
-                        }
-                    } else {
-                        history.push(ROUTES.SIGN_IN);
-                    }
-                } catch (error) {
-
-                    switch (error.code) {
-                        case "auth/wrong-password":
-                            setErrors((prevState) => (
-                                {
-                                    ...prevState,
-                                    isError: true,
-                                    password: error.message
-                                }
-                            ))
-                            break;
-
-                        case "auth/user-not-found":
-                            setErrors((prevState) => (
-                                {
-                                    ...prevState,
-                                    isError: true,
-                                    username: error.message
-                                }
-                            ))
-                            break;
-
-                        default:
-                            setErrors((prevState) => (
-                                {
-                                    ...prevState,
-                                    isError: true,
-                                    username: error.message
-                                }
-                            ))
-                            break;
-                    }
-                }
-            }
-        })();
-    }), [errors.isError]);
 
     return (
-        <Pane
-            elevation={3}
-            display={"flex"}
-            justifyContent="center"
-            alignItems="center"
-            flexDirection="column"
-            flexWrap={"wrap"}
-            padding={"1.5vw"}
-            style={{
-                backgroundColor: "#EDF0F2",
-                borderRadius: "5px"
-            }}
-        >
-            <img src={require('../assets/images/logo_new.png')} height={250} width={250} alt={LABELS.SIGN_IN}/>
-            <TextInputField
+        <div className="form-layout">
+            <div>{creds.errors.length !== 0 ? JSON.stringify(creds.errors) : false}</div>
+
+            <label htmlFor="username">{LABELS.USERNAME}</label>
+            <input
                 type="text"
                 name={"username"}
-                value={username}
-                label={LABELS.USERNAME}
-                isInvalid={(errors.username.length > 0)}
-                validationMessage={(errors.username.length > 0) ? errors.username : false}
-                onChange={e => {
-                    setErrors(prevState => ({
+                value={creds.username}
+                onChange={(e) => {
+                    let newInput = e.target.value;
+                    setCreds((prevState) => ({
                         ...prevState,
-                        username: ""
-                    }))
-                    setUsername(e.target.value)
-                }}/>
-
-            <TextInputField
-                type="password"
-                name={"password"}
-                label={LABELS.PASSWORD}
-                isInvalid={(errors.password.length > 0)}
-                validationMessage={(errors.password.length > 0) ? errors.password : false}
-                value={password}
-                onChange={e => {
-                    setErrors(prevState => ({
-                        ...prevState,
-                        password: ""
-                    }))
-                    setPassword(e.target.value)
-                }}/>
-
-            <Button
-                appearance="primary"
-                intent="success"
-                margin={"2px"}
-                width={"150px"}
-                style={{
-                    display: "inline-block",
-                    verticalAlign: "top"
+                        username: newInput
+                    }
+                    ));
                 }}
-                onClick={e => {
-                    onSubmit(e)
-                }}>
-                {LABELS.SIGN_IN}
-            </Button>
+            />
 
-            <Button
-                appearance="primary"
-                margin={"5px"}
-                width={"150px"}
-                onClick={() => history.push(ROUTES.SIGN_UP)}>
+            <label htmlFor="password">{LABELS.PASSWORD}</label>
+            <input
+                type={"password"}
+                name={"password"}
+                value={creds.password}
+                onChange={(e) => {
+                    let newInput = e.target.value;
+                    setCreds((prevState) => ({
+                        ...prevState,
+                        password: newInput
+                    }));
+                }}
+            />
+
+            <button
+                onClick={(e) => {
+                    onSubmit(e);
+                }}
+            >
+                {LABELS.SIGN_IN}
+            </button>
+
+            <button
+                onClick={() => history.push(ROUTES.SIGN_UP)}
+            >
                 {LABELS.CREATE_ACCOUNT}
-            </Button>
-        </Pane>
-    )
+            </button>
+        </div>
+    );
+
 }
 
 export default SignInForm;
