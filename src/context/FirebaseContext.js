@@ -1,7 +1,5 @@
 import React, { createContext, useEffect, useState } from "react";
 import { auth } from "../components/Firebase";
-import { Spinner, Pane, Paragraph } from "evergreen-ui";
-import { firestore } from "firebase";
 
 export const FirebaseContext = createContext(null);
 
@@ -41,17 +39,10 @@ export const FirebaseProvider = (props) => {
 
     if (pending) {
         return (
-            <Pane
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    height: "100vh",
-                }}
-            >
-                <Paragraph>{"Lets get some work done! "}</Paragraph>
-                <Spinner size={40} />
-            </Pane>
+            <div>
+                <p>{"Lets get some work done! "}</p>
+                <p>Loading...</p>
+            </div>
         );
     }
 

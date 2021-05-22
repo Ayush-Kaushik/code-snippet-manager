@@ -8,25 +8,15 @@ const TaskListLayout = () => {
     return (
         <div>
             <NewTask />
-            <div>
-                {fireStoreContext.initialStore.tasks.map((item) => {
+                {fireStoreContext.todoStore.tasks.map((item) => {
                     console.log(item);
 
                     return (
                         <div key={item.id}>
-                            <input
-                                type="checkbox"
-                                label={item.title}
-                                checked={false}
-                                onChange={(e) => {
-                                    console.log(e.target.value);
-                                }}
-                            />
+                            <label>{item.title}</label>
                         </div>
                     );
                 })}
-            </div>
-            
         </div>
     );
 };

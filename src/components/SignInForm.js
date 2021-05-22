@@ -50,7 +50,6 @@ const SignInForm = () => {
                     creds.password
                 );
 
-                console.log(firebaseContext.initialUserState);
                 if (authState.user) {
                     if (authState.user.emailVerified) {
                         history.push(ROUTES.HOME);

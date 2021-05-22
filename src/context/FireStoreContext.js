@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import firebase from "firebase/app";
 import { fireStore } from "../components/Firebase";
 import { FirebaseContext } from "./FirebaseContext";
@@ -9,40 +9,49 @@ export const FireStoreProvider = (props) => {
     const fireBaseContext = useContext(FirebaseContext);
     const [todoStore, setToDoStore] = useState({
         tasks: [],
-        selectedTaskId: null
+        errors: null
     });
+
+
+    useEffect(() => {
+        streamTasks();
+    }, [])
 
     /**
      * streams tasks created by a specific user
      */
     const streamTasks = () => {
-        // fireStore
-        //     .collection(COLLECTION.LISTS)
-        //     .where("createdBy", "==", fireBaseContext.initialUserState.email)
-        //     .get()
-        //     .then((snapshot) => {
-        //         console.log("This is called");
 
-        //         const firestoreList = snapshot.docs.map((item) => {
-        //             return {...item.data(), id: item.id};
-        //         });
+        console.log(fireBaseContext.initialUserState.email);
 
-        //         setInitialStore((prevStore) => {
-        //             return {
-        //                 ...prevStore,
-        //                 list: firestoreList,
-        //             };
-        //         });
-        //     })
-        //     .catch((error) => {
-        //         setInitialStore((prevStore) => {
-        //             return {
-        //                 ...prevStore,
-        //                 list: [],
-        //             };
-        //         });
-        //         console.log(error);
-        //     });
+        fireStore
+            .collection(fireBaseContext.initialUserState.email)
+            .get()
+            .then((snapshot) => {
+
+
+                const taskList = snapshot.docs.map((item) => {
+                    return {...item.data(), id: item.id};
+                });
+
+                console.log(taskList);
+
+                setToDoStore((prevStore) => {
+                    return {
+                        ...prevStore,
+                        tasks: taskList
+                    };
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+                setToDoStore((prevStore) => {
+                    return {
+                        ...prevStore,
+                        error: error,
+                    };
+                });
+            });
     };
 
     /**
@@ -62,16 +71,17 @@ export const FireStoreProvider = (props) => {
     };
 
 
-    const initializeCollection = (email) => {
-        return fireStore.collection(email).add({
-            "test": "test"
+    const initializeCollection = (username) => {
+        return fireStore.collection(username).add({
+            "title": "your first task!",
+            "isActive": true
         });
     }
 
     return (
         <FireStoreContext.Provider
             value={{
-                initialStore: todoStore,
+                todoStore: todoStore,
                 streamTasks: streamTasks,
                 createNewTask: createNewTask,
                 initializeCollection: initializeCollection

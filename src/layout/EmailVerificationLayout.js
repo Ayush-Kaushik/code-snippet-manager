@@ -10,8 +10,14 @@ const EmailVerificationLayout = () => {
     const [sentEmail, setSentEmail] = useState(false);
 
     useEffect(() => {
-        console.log(firebaseContext.initialUserState);
-    })
+        if(firebaseContext.initialUserState) {
+            if(firebaseContext.initialUserState.emailVerified) {
+                history.push(ROUTES.HOME);
+            } 
+        }
+    }, [])
+
+    
 
     const successVerification = () => {
         return (

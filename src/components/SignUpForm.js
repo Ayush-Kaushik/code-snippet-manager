@@ -54,7 +54,7 @@ const SignUpForm = () => {
                     creds.newPassword
                 );
 
-                await firestoreContext.initializeCollection(email);
+                await firestoreContext.initializeCollection(creds.username);
 
                 if (!firebaseContext.initialUserState.email_verified) {
                     history.push(ROUTES.EMAIL_VERIFICATION);
