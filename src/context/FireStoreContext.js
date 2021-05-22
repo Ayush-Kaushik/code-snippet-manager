@@ -22,36 +22,34 @@ export const FireStoreProvider = (props) => {
      */
     const streamTasks = () => {
 
-        console.log(fireBaseContext.initialUserState.email);
+        if (fireBaseContext.initialUserState) {
+            fireStore
+                .collection(fireBaseContext.initialUserState.email)
+                .get()
+                .then((snapshot) => {
+                    const taskList = snapshot.docs.map((item) => {
+                        return { ...item.data(), id: item.id };
+                    });
 
-        fireStore
-            .collection(fireBaseContext.initialUserState.email)
-            .get()
-            .then((snapshot) => {
+                    console.log(taskList);
 
-
-                const taskList = snapshot.docs.map((item) => {
-                    return {...item.data(), id: item.id};
+                    setToDoStore((prevStore) => {
+                        return {
+                            ...prevStore,
+                            tasks: taskList
+                        };
+                    });
+                })
+                .catch((error) => {
+                    console.log(error);
+                    setToDoStore((prevStore) => {
+                        return {
+                            ...prevStore,
+                            error: error,
+                        };
+                    });
                 });
-
-                console.log(taskList);
-
-                setToDoStore((prevStore) => {
-                    return {
-                        ...prevStore,
-                        tasks: taskList
-                    };
-                });
-            })
-            .catch((error) => {
-                console.log(error);
-                setToDoStore((prevStore) => {
-                    return {
-                        ...prevStore,
-                        error: error,
-                    };
-                });
-            });
+        }
     };
 
     /**
