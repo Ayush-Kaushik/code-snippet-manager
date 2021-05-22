@@ -48,3 +48,14 @@ They will create tasks and it will show them the tasks that they have under thei
 there is no list and tasks inside
 
 only username -> tasks
+
+
+
+
+TO DO:
+When user signup, add the email verification section
+If email is not verified then make them go to email verification layout
+
+When Signup and email verified complete - create a new list with user's email
+
+When user logs in make all these routes inaccessible: signin, signup and email verification

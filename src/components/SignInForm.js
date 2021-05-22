@@ -24,6 +24,14 @@ const SignInForm = () => {
         errors: []
     });
 
+    useEffect(() => {
+        if(firebaseContext.initialUserState) {
+            if(firebaseContext.initialUserState.emailVerified) {
+                history.push(ROUTES.HOME);
+            } 
+        }
+    }, [])
+
     const onSubmit = async (e) => {
         e.preventDefault();
 
@@ -55,15 +63,12 @@ const SignInForm = () => {
             }
         } catch (error) {
             console.log(error);
-            switch (error.code) {
-                default:
-                    setCreds((prevState) => ({
-                        ...prevState,
-                        isError: true,
-                        errors: error.message,
-                    }));
-                    break;
-            }
+
+            setCreds((prevState) => ({
+                ...prevState,
+                isError: true,
+                errors: error.message,
+            }));
         }
     }
 

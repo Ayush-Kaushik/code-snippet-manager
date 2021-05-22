@@ -61,12 +61,20 @@ export const FireStoreProvider = (props) => {
         });
     };
 
+
+    const initializeCollection = (email) => {
+        return fireStore.collection(email).add({
+            "test": "test"
+        });
+    }
+
     return (
         <FireStoreContext.Provider
             value={{
                 initialStore: todoStore,
                 streamTasks: streamTasks,
-                createNewTask: createNewTask
+                createNewTask: createNewTask,
+                initializeCollection: initializeCollection
             }}
         >
             {props.children}

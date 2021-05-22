@@ -33,7 +33,7 @@ const SideBar = () => {
                         <div
                             key={index}
                             id={index}
-                            onSelect={() => {
+                            onClick={() => {
                                 firebaseContext.signOut();
                             }}
                         >

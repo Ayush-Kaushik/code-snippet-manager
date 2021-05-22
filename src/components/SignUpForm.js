@@ -1,9 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import Joi from 'joi';
 import { useHistory } from "react-router-dom";
 import { FirebaseContext } from "../context/FirebaseContext";
 import * as ROUTES from "../constants/routes";
 import * as LABELS from "../constants/labels";
+import { FireStoreContext } from "../context/FireStoreContext";
 
 const signUpSchema = Joi.object().keys({
     username: Joi.string().email({ tlds: { allow: false } }).required(),
@@ -14,6 +15,15 @@ const signUpSchema = Joi.object().keys({
 const SignUpForm = () => {
     const history = useHistory();
     const firebaseContext = useContext(FirebaseContext);
+    const firestoreContext = useContext(FireStoreContext);
+
+    useEffect(() => {
+        if(firebaseContext.initialUserState) {
+            if(firebaseContext.initialUserState.emailVerified) {
+                history.push(ROUTES.HOME);
+            } 
+        }
+    }, [])
 
     const [creds, setCreds] = useState({
         username: "",
@@ -44,6 +54,8 @@ const SignUpForm = () => {
                     creds.newPassword
                 );
 
+                await firestoreContext.initializeCollection(email);
+
                 if (!firebaseContext.initialUserState.email_verified) {
                     history.push(ROUTES.EMAIL_VERIFICATION);
                 }
@@ -51,15 +63,12 @@ const SignUpForm = () => {
                 history.push(ROUTES.HOME);
             }
         } catch (error) {
-            switch (error.code) {
-                default:
-                    setMetaData((prevState) => ({
-                        ...prevState,
-                        isError: true,
-                        errors: error.message,
-                    }));
-                    break;
-            }
+            console.log(error);
+            setMetaData((prevState) => ({
+                ...prevState,
+                isError: true,
+                errors: error.message,
+            }));
         }
     };
 
@@ -81,7 +90,6 @@ const SignUpForm = () => {
                     }));
                 }}
             />
-
 
             <label htmlFor="password">{LABELS.NEW_PASSWORD}</label>
             <input

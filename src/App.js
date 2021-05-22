@@ -10,11 +10,6 @@ import {FirebaseContext} from "./context/FirebaseContext";
 import TaskListLayout from "./layout/TaskListLayout";
 import EmailVerificationLayout from "./layout/EmailVerificationLayout";
 
-const backgroundStyle = {
-    display: "flex",
-    flexDirection: "row",
-};
-
 const showSideBar = (initialUserState) => {
     if (initialUserState) {
         return initialUserState.emailVerified === true ? <SideBar /> : <></>;
@@ -29,15 +24,7 @@ function App() {
     return (
         <div>
             <Router>
-                <div style={backgroundStyle}>
                     {showSideBar(firebaseContext.initialUserState)}
-                    <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            width: "100%",
-                        }}
-                    >
                         <Route exact path={ROUTES.SIGN_UP} component={SignUpLayout} />
                         <Route exact path={ROUTES.SIGN_IN} component={SignInLayout} />
                         <Route
@@ -60,8 +47,6 @@ function App() {
                             path={ROUTES.PROFILE}
                             component={ProfileLayout}
                         />
-                    </div>
-                </div>
             </Router>
         </div>
     );
