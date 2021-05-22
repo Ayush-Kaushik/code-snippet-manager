@@ -3,8 +3,10 @@ import SignInForm from "../components/SignInForm";
 
 const SignInLayout = () => {
     return (
-        <div>
+        <div className="form-external-layout">
+            <div/>
             <SignInForm />
+            <div/>
         </div>
     );
 };
