@@ -10,6 +10,7 @@
     "evergreen-ui": "^5.1.2",
     "firebase": "^7.24.0",
     "framer-motion": "^2.9.1",
+    "joi": "^17.4.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-form": "^4.0.1",
@@ -76,7 +77,6 @@
     ]
   },
   "devDependencies": {
-    "eslint": "^7.14.0",
     "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-prettier": "^3.1.4",
     "lint-staged": "^10.5.1",

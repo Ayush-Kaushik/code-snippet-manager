@@ -3,7 +3,7 @@ import {FireStoreContext} from "../context/FireStoreContext";
 import {Checkbox} from "evergreen-ui";
 import NewTask from "../components/NewTask";
 
-const TaskCollectionLayout = () => {
+const TaskListLayout = () => {
     const fireStoreContext = useContext(FireStoreContext);
 
     return (
@@ -44,4 +44,4 @@ const TaskCollectionLayout = () => {
     );
 };
 
-export default TaskCollectionLayout;
+export default TaskListLayout;

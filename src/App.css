@@ -1,1 +1,16 @@
+.form-layout {
+    margin-top: 20px;
+    max-width: 200px;
+    display: flex;
+    flex-direction: column;
+}
 
+.form-layout>input {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.form-layout>button {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}

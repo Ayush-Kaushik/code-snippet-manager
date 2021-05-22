@@ -37,3 +37,14 @@ WIP
   
 ## 📝 License <a name = "acknowledgement"></a>  
 - MIT
+
+
+
+
+Logic: 
+
+The user will login to their to do list application
+They will create tasks and it will show them the tasks that they have under their username as the key
+there is no list and tasks inside
+
+only username -> tasks

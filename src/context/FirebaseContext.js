@@ -1,6 +1,7 @@
 import React, {createContext, useEffect, useState} from "react";
 import {auth} from "../components/Firebase";
 import {Spinner, Pane, Paragraph} from "evergreen-ui";
+import { firestore } from "firebase";
 
 export const FirebaseContext = createContext(null);
 
@@ -9,6 +10,7 @@ export const FirebaseProvider = (props) => {
     const [pending, setPending] = useState(true);
 
     const createUserWithEmailAndPassword = (email, password) => {
+        firestore.collection(email);
         return auth.createUserWithEmailAndPassword(email, password);
     };
 
