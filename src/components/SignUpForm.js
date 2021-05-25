@@ -36,17 +36,26 @@ const SignUpForm = () => {
         errors: []
     })
 
+
+    const printErrors = () => {
+        if(metaData.errors) {
+            return metaData.errors.map(item => {
+                console.log(item);
+                return (<p>{item}</p>);
+            })
+        }   
+    }
+
     const onSubmit = async (e) => {
         e.preventDefault();
 
         try {
             let valid = signUpSchema.validate(creds, { abortEarly: false });
             if (valid.error) {
-                console.log(valid);
                 setMetaData((prevState) => ({
                     ...prevState,
                     isError: true,
-                    errors: valid.error.details
+                    errors: valid.error.details.map(item => item.message)
                 }));
             } else {
                 await firebaseContext.createUserWithEmailAndPassword(
@@ -74,12 +83,12 @@ const SignUpForm = () => {
 
     return (
         <div className="form-layout">
-            <div>{metaData.errors.length !== 0 ? JSON.stringify(metaData.errors) : false}</div>
-
             <div>
                 <img src={require('../assets/write.png')} height={150} width={150} alt={LABELS.SIGN_IN} />
                 <img src={require('../assets/checkmark.png')} height={150} width={150} alt={LABELS.SIGN_IN} />
             </div>
+
+            <div className="error-layout">{printErrors()}</div>
 
             <label htmlFor="username">{LABELS.USERNAME}</label>
             <input

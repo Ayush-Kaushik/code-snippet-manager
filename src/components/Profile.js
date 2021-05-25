@@ -8,8 +8,10 @@ const Profile = () => {
     const firebaseContext = useContext(FirebaseContext);
     const history = useHistory();
 
+    console.log(firebaseContext.initialUserState.email);
+
     const [creds, setCreds] = useState({
-        username: useState(firebaseContext.initialUserState.email),
+        username: firebaseContext.initialUserState.email,
         newPassword: "",
         confirmPassword: ""
     });
@@ -82,7 +84,7 @@ const Profile = () => {
             />
 
             <button
-                className="success-button"
+                className="button success-button"
                 onClick={(e) => {
                     onSubmit(e);
                 }}
