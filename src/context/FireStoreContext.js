@@ -69,6 +69,24 @@ export const FireStoreProvider = (props) => {
         });
     };
 
+    /**
+     * 
+     * @param {*} taskId Id of the task as stored in firestore collection
+     */
+    const deleteTask = (collectionId, taskId) => {
+        console.log(collectionId);
+        console.log(taskId);
+
+        return fireStore.collection(collectionId).doc(taskId).delete();
+    }
+
+
+    const markAsComplete = (collectionId, taskId) => {
+        return fireStore.collection(collectionId).doc(taskId).update({
+            isComplete: true
+        })
+    }
+
 
     const initializeCollection = (username) => {
         return fireStore.collection(username).add({
@@ -83,6 +101,8 @@ export const FireStoreProvider = (props) => {
                 todoStore: todoStore,
                 streamTasks: streamTasks,
                 createNewTask: createNewTask,
+                deleteTask: deleteTask,
+                markAsComplete: markAsComplete,
                 initializeCollection: initializeCollection
             }}
         >

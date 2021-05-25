@@ -21,7 +21,9 @@ const NewTask = () => {
             {
                 title: taskInput.title,
                 isActive: true
-            });
+            }).then(
+                fireStoreContext.streamTasks()
+            );
     };
 
     return (

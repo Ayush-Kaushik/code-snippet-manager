@@ -5,7 +5,7 @@ const SignInLayout = () => {
     return (
         <div className="form-external-layout">
             <div/>
-            <SignInForm />
+                <SignInForm />
             <div/>
         </div>
     );

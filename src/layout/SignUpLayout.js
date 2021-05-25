@@ -5,10 +5,9 @@ const SignUpLayout = () => {
     return (
         <div className="form-external-layout">
             <div />
-            <SignUpForm />
+                <SignUpForm />
             <div />
         </div>
-
     );
 };
 
