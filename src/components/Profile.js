@@ -2,13 +2,11 @@ import React, { useContext, useState } from "react";
 import * as LABELS from "../constants/labels";
 import * as ROUTES from "../constants/routes";
 import { FirebaseContext } from "../context/FirebaseContext";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
     const firebaseContext = useContext(FirebaseContext);
-    const history = useHistory();
-
-    console.log(firebaseContext.initialUserState.email);
+    const navigate = useNavigate();
 
     const [creds, setCreds] = useState({
         username: firebaseContext.initialUserState.email,
@@ -19,26 +17,26 @@ const Profile = () => {
     const [metaData, setMetaData] = useState({
         errors: [],
         isError: false
-    })
+    });
 
     const onSubmit = (e) => {
         e.preventDefault();
 
         const promises = [];
 
-        if (newPassword.length > 0) {
-            promises.push(firebaseContext.updatePassword(newPassword));
+        if (creds.newPassword.length > 0) {
+            promises.push(firebaseContext.updatePassword(creds.newPassword));
         }
 
         Promise.all(promises)
             .then(() => {
-                history.push(ROUTES.HOME);
+                navigate(ROUTES.HOME);
             })
             .catch((error) => {
                 setMetaData((prevState) => ({
                     ...prevState,
                     isError: true,
-                    errors: error,
+                    errors: error
                 }));
             });
     };
@@ -46,12 +44,7 @@ const Profile = () => {
     return (
         <div className="form-layout">
             <label>{LABELS.USERNAME}</label>
-            <input
-                readOnly
-                type="text"
-                name={"username"}
-                value={creds.username}
-            />
+            <input readOnly type="text" name={"username"} value={creds.username} />
 
             <label htmlFor={"password"}>{LABELS.NEW_PASSWORD}</label>
             <input
@@ -89,8 +82,8 @@ const Profile = () => {
                     onSubmit(e);
                 }}
             >
-                Update
-                </button>
+                {"Update"}
+            </button>
         </div>
     );
 };

@@ -1,21 +1,27 @@
 import React, { useState, useContext, useEffect } from "react";
-import Joi from 'joi';
-import { useHistory } from "react-router-dom";
-import * as ROUTES from "../constants/routes";
-import { FirebaseContext } from "../context/FirebaseContext";
-import * as LABELS from "../constants/labels";
-import "../App.css";
+import Joi from "joi";
+import { useNavigate } from "react-router-dom";
+import * as ROUTES from "../../../constants/routes";
+import { FirebaseContext } from "../../../context/FirebaseContext";
+import * as LABELS from "../../../constants/labels";
+import "./LoginForm.styles.css";
 
 const signInSchema = Joi.object().keys({
-    username: Joi.string().email({ tlds: { allow: false } }).required(),
+    username: Joi.string()
+        .email({ tlds: { allow: false } })
+        .required(),
     password: Joi.string().required(),
     isError: Joi.boolean().required(),
     errors: Joi.array()
 });
 
 const SignInForm = () => {
+    /* eslint-disable no-console */
+    console.log("Login Form");
+    /* eslint-enable no-console */
+
     const firebaseContext = useContext(FirebaseContext);
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const [creds, setCreds] = useState({
         username: "",
@@ -27,10 +33,10 @@ const SignInForm = () => {
     useEffect(() => {
         if (firebaseContext.initialUserState) {
             if (firebaseContext.initialUserState.emailVerified) {
-                history.push(ROUTES.HOME);
+                navigate(ROUTES.HOME);
             }
         }
-    }, [])
+    }, []);
 
     const onSubmit = async (e) => {
         e.preventDefault();
@@ -41,7 +47,7 @@ const SignInForm = () => {
                 setCreds((prevState) => ({
                     ...prevState,
                     isError: true,
-                    errors: valid.error.details.map(item => item.message)
+                    errors: valid.error.details.map((item) => item.message)
                 }));
             } else {
                 const authState = await firebaseContext.signInWithEmailAndPassword(
@@ -51,43 +57,47 @@ const SignInForm = () => {
 
                 if (authState.user) {
                     if (authState.user.emailVerified) {
-                        history.push(ROUTES.HOME);
+                        navigate(ROUTES.HOME);
                     } else {
-                        history.push(ROUTES.EMAIL_VERIFICATION);
+                        navigate(ROUTES.EMAIL_VERIFICATION);
                     }
                 } else {
-                    history.push(ROUTES.SIGN_IN);
+                    navigate(ROUTES.SIGN_IN);
                 }
             }
         } catch (error) {
-            console.log(error);
-
             setCreds((prevState) => ({
                 ...prevState,
                 isError: true,
-                errors: [error.message],
+                errors: [error.message]
             }));
         }
-    }
+    };
 
     const printErrors = () => {
-        return creds.errors.map(item => {
-            console.log(item);
-            return (<p>{item}</p>);
-        })
-    }
-
+        return creds.errors.map((item) => {
+            return <p>{item}</p>;
+        });
+    };
 
     return (
         <div className="form-layout">
             <div>
-                <img src={require('../assets/checkmark.png')} height={150} width={150} alt={LABELS.SIGN_IN} />
-                <img src={require('../assets/write.png')} height={150} width={150} alt={LABELS.SIGN_IN} />
+                <img
+                    src={require("../../../assets/checkmark.png")}
+                    height={150}
+                    width={150}
+                    alt={LABELS.SIGN_IN}
+                />
+                <img
+                    src={require("../../../assets/write.png")}
+                    height={150}
+                    width={150}
+                    alt={LABELS.SIGN_IN}
+                />
             </div>
 
-            <div className="error-layout">
-                {printErrors()}
-            </div>
+            <div className="error-layout"> {printErrors()} </div>
 
             <label htmlFor="username">{LABELS.USERNAME}</label>
             <input
@@ -99,8 +109,7 @@ const SignInForm = () => {
                     setCreds((prevState) => ({
                         ...prevState,
                         username: newInput
-                    }
-                    ));
+                    }));
                 }}
             />
 
@@ -130,13 +139,13 @@ const SignInForm = () => {
 
                 <button
                     className="create-account-button"
-                    onClick={() => history.push(ROUTES.SIGN_UP)}
+                    onClick={() => navigate(ROUTES.SIGN_UP)}
                 >
                     {LABELS.CREATE_ACCOUNT}
                 </button>
             </div>
         </div>
     );
-}
+};
 
 export default SignInForm;

@@ -1,28 +1,28 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FirebaseContext } from "../context/FirebaseContext";
 import Emoji from "../components/Emoji";
 import * as ROUTES from "../constants/routes";
 
 const EmailVerificationLayout = () => {
     const firebaseContext = useContext(FirebaseContext);
-    const history = useHistory();
+    const navigate = useNavigate();
     const [sentEmail, setSentEmail] = useState(false);
 
     useEffect(() => {
         if (firebaseContext.initialUserState) {
             if (firebaseContext.initialUserState.emailVerified) {
-                history.push(ROUTES.HOME);
+                navigate(ROUTES.HOME);
             }
         }
-    }, [])
+    }, []);
 
     const successVerification = () => {
         return (
             <button
                 className="success-button"
                 onClick={(e) => {
-                    history.push(ROUTES.HOME);
+                    navigate(ROUTES.HOME);
                 }}
             >
                 {"Let's get some work done!"}
@@ -33,18 +33,14 @@ const EmailVerificationLayout = () => {
     const askVerification = () => {
         return (
             <div>
-                <div>
-                    {"Verify your email address"}
-                </div>
+                <div>{"Verify your email address"}</div>
                 <div>
                     {"Please confirm that you want to use this as your Get it done account." +
                         " Once its done, you'll be able to get your work done!"}
                 </div>
 
                 {sentEmail ? (
-                    <div>
-                        {"Check your email, verify and refresh"}
-                    </div>
+                    <div>{"Check your email, verify and refresh"}</div>
                 ) : (
                     <button
                         className="button success-button"
@@ -52,12 +48,9 @@ const EmailVerificationLayout = () => {
                             firebaseContext
                                 .sendVerificationEmail()
                                 .then((result) => {
-                                    console.log(result);
                                     setSentEmail(true);
                                 })
-                                .catch((error) => {
-                                    console.log(error);
-                                });
+                                .catch((error) => {});
                         }}
                     >
                         {"Send Verification"}
@@ -75,15 +68,15 @@ const EmailVerificationLayout = () => {
                 </div>
             </div>
 
-
             {firebaseContext.initialUserState.emailVerified
                 ? successVerification
                 : askVerification(firebaseContext)}
 
-            <button className="button fail-button"
+            <button
+                className="button fail-button"
                 onClick={(e) => {
                     firebaseContext.signOut();
-                    history.push(ROUTES.SIGN_IN);
+                    navigate(ROUTES.SIGN_IN);
                 }}
             >
                 {"Cancel"}

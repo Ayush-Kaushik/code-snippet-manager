@@ -1,5 +1,4 @@
-
-<h2 align="center">Get It Done 🔥 </h2> 
+<h2 align="center">Get It Done 🔥 </h2>
 
 <p align="center"> 
 Get it done is a simple <b>TO DO LIST</b> which helps you to manage your daily tasks.
@@ -24,8 +23,19 @@ WIP
 ## 🚀 Deployment <a name = "deployment"></a>  
 Docker Support Coming Soon  
   
-## 🎈 Usage <a name="usage"></a>  
-WIP  
+## 🎈 Usage <a name="usage"></a>
+- They will create tasks and it will show them the tasks that they have under their username as the key
+there is no list and tasks inside
+
+only username -> tasks
+
+TO DO:
+When user signup, add the email verification section
+If email is not verified then make them go to email verification layout
+
+When Signup and email verified complete - create a new list with user's email
+
+When user logs in make all these routes inaccessible: signin, signup and email verification
   
 ## ⛏️ Built Using <a name = "built_using"></a>  
 - [React](https://reactjs.org/) - Front End  
@@ -39,23 +49,3 @@ WIP
 - MIT
 
 
-
-
-Logic: 
-
-The user will login to their to do list application
-They will create tasks and it will show them the tasks that they have under their username as the key
-there is no list and tasks inside
-
-only username -> tasks
-
-
-
-
-TO DO:
-When user signup, add the email verification section
-If email is not verified then make them go to email verification layout
-
-When Signup and email verified complete - create a new list with user's email
-
-When user logs in make all these routes inaccessible: signin, signup and email verification

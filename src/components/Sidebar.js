@@ -7,18 +7,18 @@ const sideBarContent = [
     {
         label: "Task List",
         path: ROUTES.HOME,
-        icon: "",
+        icon: ""
     },
     {
         label: "Profile",
         path: ROUTES.PROFILE,
-        icon: "",
+        icon: ""
     },
     {
         label: "SignOut",
         path: ROUTES.PROFILE,
-        icon: "",
-    },
+        icon: ""
+    }
 ];
 
 const SideBar = () => {
@@ -42,10 +42,7 @@ const SideBar = () => {
                     );
                 } else {
                     return (
-                        <Link
-                            key={index}
-                            to={item.path}
-                        >
+                        <Link key={index} to={item.path}>
                             <div
                                 key={index}
                                 id={index}

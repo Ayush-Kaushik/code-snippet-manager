@@ -14,16 +14,12 @@ const NewTask = () => {
     const onSubmit = (e) => {
         e.preventDefault();
 
-        console.log(firstBaseContext);
-
-        fireStoreContext.createNewTask(
-            firstBaseContext.initialUserState.email,
-            {
+        fireStoreContext
+            .createNewTask(firstBaseContext.initialUserState.email, {
                 title: taskInput.title,
                 isActive: true
-            }).then(
-                fireStoreContext.streamTasks()
-            );
+            })
+            .then(fireStoreContext.streamTasks());
     };
 
     return (
@@ -38,7 +34,7 @@ const NewTask = () => {
                         return {
                             ...prevState,
                             title: newTitleInput
-                        }
+                        };
                     });
                 }}
             />
@@ -52,15 +48,10 @@ const NewTask = () => {
                 >
                     {"Add Task"}
                 </button>
-                <button className="button fail-button"
-                    onSubmit={(e) => {
-                        console.log("scratch that bro");
-                    }}
-                >
+                <button className="button fail-button" onSubmit={(e) => {}}>
                     {"Cancel"}
                 </button>
             </div>
-
         </div>
     );
 };

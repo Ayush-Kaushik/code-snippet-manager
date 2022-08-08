@@ -31,7 +31,6 @@ export const FirebaseProvider = (props) => {
 
     useEffect(() => {
         return auth.onAuthStateChanged((userAuth) => {
-            console.log(userAuth);
             setInitialUser(userAuth);
             setPending(false);
         });
@@ -55,7 +54,7 @@ export const FirebaseProvider = (props) => {
                 signOut: signOut,
                 updateEmail: updateEmail,
                 updatePassword: updatePassword,
-                sendVerificationEmail: sendVerificationEmail,
+                sendVerificationEmail: sendVerificationEmail
             }}
         >
             {props.children}

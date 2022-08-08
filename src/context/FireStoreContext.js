@@ -12,16 +12,14 @@ export const FireStoreProvider = (props) => {
         errors: null
     });
 
-
     useEffect(() => {
         streamTasks();
-    }, [])
+    }, []);
 
     /**
      * streams tasks created by a specific user
      */
     const streamTasks = () => {
-
         if (fireBaseContext.initialUserState) {
             fireStore
                 .collection(fireBaseContext.initialUserState.email)
@@ -31,8 +29,6 @@ export const FireStoreProvider = (props) => {
                         return { ...item.data(), id: item.id };
                     });
 
-                    console.log(taskList);
-
                     setToDoStore((prevStore) => {
                         return {
                             ...prevStore,
@@ -41,11 +37,10 @@ export const FireStoreProvider = (props) => {
                     });
                 })
                 .catch((error) => {
-                    console.log(error);
                     setToDoStore((prevStore) => {
                         return {
                             ...prevStore,
-                            error: error,
+                            error: error
                         };
                     });
                 });
@@ -59,10 +54,6 @@ export const FireStoreProvider = (props) => {
      * @returns {Promise<firebase.firestore.DocumentReference<firebase.firestore.DocumentData>>}
      */
     const createNewTask = (collectionId, taskDetails) => {
-
-        console.log(collectionId);
-        console.log(taskDetails);
-
         return fireStore.collection(collectionId).add({
             title: taskDetails.title,
             isActive: taskDetails.isActive
@@ -70,30 +61,25 @@ export const FireStoreProvider = (props) => {
     };
 
     /**
-     * 
+     *
      * @param {*} taskId Id of the task as stored in firestore collection
      */
     const deleteTask = (collectionId, taskId) => {
-        console.log(collectionId);
-        console.log(taskId);
-
         return fireStore.collection(collectionId).doc(taskId).delete();
-    }
-
+    };
 
     const markAsComplete = (collectionId, taskId) => {
         return fireStore.collection(collectionId).doc(taskId).update({
             isComplete: true
-        })
-    }
-
+        });
+    };
 
     const initializeCollection = (username) => {
         return fireStore.collection(username).add({
-            "title": "your first task!",
-            "isActive": true
+            title: "your first task!",
+            isActive: true
         });
-    }
+    };
 
     return (
         <FireStoreContext.Provider

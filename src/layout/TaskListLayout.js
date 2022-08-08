@@ -9,40 +9,47 @@ const TaskListLayout = () => {
 
     const deleteTask = (event) => {
         event.preventDefault();
-
-        try {
-            let taskId = event.target.id;
-            console.log(event.target);
-            fireStoreContext.deleteTask(firebaseContext.initialUserState.email, taskId).then(fireStoreContext.streamTasks());
-        } catch (error) {
-            console.log(error);
-        }
-    }
+        let taskId = event.target.id;
+        fireStoreContext
+            .deleteTask(firebaseContext.initialUserState.email, taskId)
+            .then(fireStoreContext.streamTasks());
+    };
 
     const markComplete = (event) => {
         event.preventDefault();
 
-        try {
-            let taskId = event.target.id;
-            console.log(event.target);
-            fireStoreContext.markAsComplete(firebaseContext.initialUserState.email, taskId).then(fireStoreContext.streamTasks());
-        } catch (error) {
-            console.log(error);
-        }
-    }
+        let taskId = event.target.id;
+        fireStoreContext
+            .markAsComplete(firebaseContext.initialUserState.email, taskId)
+            .then(fireStoreContext.streamTasks());
+    };
 
     return (
         <div>
             <NewTask />
             <div>
-
                 {fireStoreContext.todoStore.tasks.map((item) => {
-                    console.log(item);
-
                     return (
-                        <div key={item.id} className="task-card" id={item.id} onClick={(e) => markComplete(e)}>
-                            {item.isComplete ? <label className="task-complete" id={item.id}>{item.title}</label> : <label id={item.id}>{item.title}</label>}
-                            <button className="button fail-button" id={item.id} onClick={(e) => deleteTask(e)}>Delete</button>
+                        <div
+                            key={item.id}
+                            className="task-card"
+                            id={item.id}
+                            onClick={(e) => markComplete(e)}
+                        >
+                            {item.isComplete ? (
+                                <label className="task-complete" id={item.id}>
+                                    {item.title}
+                                </label>
+                            ) : (
+                                <label id={item.id}>{item.title}</label>
+                            )}
+                            <button
+                                className="button fail-button"
+                                id={item.id}
+                                onClick={(e) => deleteTask(e)}
+                            >
+                                {"Delete"}
+                            </button>
                         </div>
                     );
                 })}

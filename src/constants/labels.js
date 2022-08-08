@@ -15,5 +15,5 @@ export const CREATE_TASK = "Create task";
 export const PRIORITY = [
     { label: "Low", value: "LOW" },
     { label: "Medium", value: "MEDIUM" },
-    { label: "High", value: "HIGH" },
+    { label: "High", value: "HIGH" }
 ];

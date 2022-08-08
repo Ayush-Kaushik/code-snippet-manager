@@ -1,20 +1,24 @@
 import React, { useContext } from "react";
-import { Route, Redirect } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { FirebaseContext } from "../context/FirebaseContext";
 import * as ROUTES from "../constants/routes";
 
-const PrivateRoute = (props) => {
+const PrivateRoute = (Component) => {
     const fireBaseContext = useContext(FirebaseContext);
+
+    /* eslint-disable no-console */
+    console.log("this works");
+    /* eslint-enable no-console */
 
     if (fireBaseContext.initialUserState != null) {
         if (fireBaseContext.initialUserState.emailVerified) {
-            return <Route exact component={props.component} path={props.path} />;
+            return <Component />;
         } else {
-            return <Redirect to={ROUTES.EMAIL_VERIFICATION} />;
+            return <Navigate to={ROUTES.EMAIL_VERIFICATION} />;
         }
     }
 
-    return <Redirect to={ROUTES.SIGN_IN} />;
+    return <Navigate to={ROUTES.SIGN_IN} />;
 };
 
 export default PrivateRoute;
